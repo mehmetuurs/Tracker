@@ -398,7 +398,6 @@ select option{background:var(--surface2);}
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwfivX8C9_fNLBNw2cj6hJufvUq1BRhkqalkqRPiMXaio85L-QFirNKvJK463eNwP_F/exec';
-const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
 
 const KNOWN_SHOPS = [
   {name:'Warehouse',address:'Skorupki 81, Ząbki'},
@@ -745,20 +744,13 @@ async function sendMessage(){
     `\n\nUPCOMING UNI EVENTS:\n${upcomingUni||'None'}`;
 
   try{
-    const res=await fetch(CLAUDE_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','x-api-key':''},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:contextualSystem,
-        messages:chatHistory
-      })
+    const res=await sheetsApi('claudeChat',{
+      system:contextualSystem,
+      messages:chatHistory
     });
-    const data=await res.json();
     removeTyping();
 
-    const reply=data.content?.[0]?.text||'Sorry, something went wrong. Try again!';
+    const reply=res?.ok ? res.text : 'Sorry, something went wrong. Try again!';
     chatHistory.push({role:'assistant',content:reply});
 
     // Extract JSON action if present
@@ -774,7 +766,7 @@ async function sendMessage(){
     }
   } catch(e){
     removeTyping();
-    appendMessage('claude','Sorry, I had trouble connecting. Check your internet and try again!');
+    appendMessage('claude','Bağlantı hatası oldu, tekrar dene / Connection error, please try again.');
   }
   document.getElementById('ai-send-btn').disabled=false;
 }
