@@ -6,7 +6,7 @@
 <title>Mehmet's Tracker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-:root {
+:root{
   --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#232323;--surface3:#2c2c2c;
   --border:#333;--border2:#444;--text:#f0f0f0;--text2:#999;--text3:#666;
   --accent:#e8b84b;--accent2:#c49a2e;--red:#e05555;--green:#4caf7d;
@@ -55,7 +55,7 @@ select option{background:var(--surface2);}
 .btn:hover{background:var(--surface3);color:var(--text);}
 .btn:disabled{opacity:.4;cursor:not-allowed;}
 .btn.accent{background:var(--accent);border-color:var(--accent);color:#000;font-weight:600;}
-.btn.accent:hover{background:var(--accent2);border-color:var(--accent2);}
+.btn.accent:hover{background:var(--accent2);}
 .btn.danger{color:var(--red);border-color:#4a2828;}
 .btn.danger:hover{background:#2a1a1a;}
 .btn.small{padding:4px 10px;font-size:11px;}
@@ -66,7 +66,6 @@ select option{background:var(--surface2);}
 .stat .s-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
 .stat .s-value{font-size:24px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:var(--accent);}
 .stat .s-unit{font-size:11px;color:var(--text3);margin-top:2px;}
-
 .divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
 
 /* SHOP ITEMS */
@@ -95,8 +94,9 @@ select option{background:var(--surface2);}
 .badge-green{background:#0e2a1a;color:#4caf7d;border:1px solid #1a4a2a;}
 .badge-red{background:#2e1a1a;color:#e05555;border:1px solid #4a2a2a;}
 .badge-blue{background:#1a2234;color:#5b9bd5;border:1px solid #2a3a54;}
+.badge-purple{background:#221a34;color:#9b7fd4;border:1px solid #3a2a54;}
 
-/* UNI / NOTES */
+/* UNI */
 .uni-section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:1.25rem 0 .6rem;}
 .uni-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:8px;}
 .uni-item.past{opacity:.45;}
@@ -114,14 +114,14 @@ select option{background:var(--surface2);}
 .sched-info{flex:1;}
 .sched-subject{font-size:13px;font-weight:500;color:var(--text);}
 .sched-meta{font-size:11px;color:var(--text3);margin-top:2px;}
-.sched-note-item{display:flex;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);background:none;}
+.sched-note-item{display:flex;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);}
 .sched-note-text{font-size:13px;color:var(--text2);flex:1;}
 
 /* FILTER */
 .filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem;}
 .filter-bar .field{min-width:130px;}
 
-/* UPCOMING BANNER */
+/* UPCOMING */
 .upcoming-card{background:linear-gradient(135deg,#1a1500,#231a00);border:1px solid #4a3520;border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;}
 .upcoming-label{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
 .upcoming-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #2a1f0e;}
@@ -129,35 +129,94 @@ select option{background:var(--surface2);}
 .upcoming-name{font-size:13px;color:var(--text);font-weight:500;}
 .upcoming-date{font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--accent);}
 
+/* DAILY SUMMARY */
+.summary-card{background:linear-gradient(135deg,#0d1a0d,#1a1a0a);border:1px solid #2a4a20;border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.25rem;}
+.summary-greeting{font-size:20px;font-weight:600;color:var(--text);margin-bottom:.5rem;}
+.summary-date{font-size:12px;color:var(--text3);margin-bottom:1.25rem;font-family:'IBM Plex Mono',monospace;}
+.summary-items{display:flex;flex-direction:column;gap:8px;}
+.summary-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);line-height:1.5;}
+.summary-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;}
+.summary-dot.red{background:var(--red);}
+.summary-dot.blue{background:var(--blue);}
+.summary-dot.green{background:var(--green);}
+.summary-dot.purple{background:var(--purple);}
+
 /* LOADER */
 .loader{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-row{display:flex;align-items:center;color:var(--text3);font-size:13px;padding:2rem 0;}
 
 /* TOAST */
 #toast{position:fixed;bottom:2rem;right:2rem;background:var(--accent);color:#000;font-weight:600;font-size:13px;padding:10px 18px;border-radius:var(--radius);opacity:0;transform:translateY(10px);transition:all .2s;pointer-events:none;z-index:9999;}
 #toast.show{opacity:1;transform:translateY(0);}
 #toast.error{background:var(--red);color:#fff;}
-
 .empty{text-align:center;color:var(--text3);font-size:13px;padding:3rem 0;}
 
-/* API WARNING */
-.api-warning{background:#1a1000;border:1px solid #4a3000;border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;font-size:13px;color:#c8982a;line-height:1.6;}
-.api-warning b{color:var(--accent);}
-.api-warning code{background:#2a1f00;padding:2px 6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;word-break:break-all;}
+/* ── CLAUDE AI CHAT ── */
+.ai-page{display:flex;flex-direction:column;height:100vh;max-height:100vh;padding:0;}
+.ai-header{padding:1.5rem 2rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.ai-header-top{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
+.ai-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#e8b84b,#c49a2e);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ai-name{font-size:16px;font-weight:600;color:var(--text);}
+.ai-status{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px;}
+.ai-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;}
+.ai-messages{flex:1;overflow-y:auto;padding:1.5rem 2rem;display:flex;flex-direction:column;gap:1rem;}
+.msg{display:flex;gap:10px;align-items:flex-start;max-width:85%;}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg-bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;}
+.msg.claude .msg-bubble{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:4px 12px 12px 12px;}
+.msg.user .msg-bubble{background:var(--accent);color:#000;font-weight:500;border-radius:12px 4px 12px 12px;}
+.msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px;}
+.msg.claude .msg-avatar{background:linear-gradient(135deg,#e8b84b,#c49a2e);}
+.msg.user .msg-avatar{background:var(--surface3);border:1px solid var(--border2);}
+.msg-action{margin-top:8px;padding:8px 12px;background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--accent);cursor:pointer;display:inline-block;}
+.msg-action:hover{background:var(--surface2);}
+.typing{display:flex;gap:4px;align-items:center;padding:12px 14px;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:bounce .9s infinite;}
+.typing span:nth-child(2){animation-delay:.15s;}
+.typing span:nth-child(3){animation-delay:.3s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+.ai-input-area{padding:1rem 2rem 1.5rem;border-top:1px solid var(--border);flex-shrink:0;}
+.ai-input-row{display:flex;gap:8px;align-items:flex-end;}
+.ai-textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-lg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:13px;padding:10px 14px;resize:none;min-height:44px;max-height:120px;line-height:1.5;transition:border-color .12s;}
+.ai-textarea:focus{outline:none;border-color:var(--accent);}
+.ai-send{width:40px;height:40px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .12s;}
+.ai-send:hover{background:var(--accent2);}
+.ai-send:disabled{opacity:.4;cursor:not-allowed;}
+.ai-mic{width:40px;height:40px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .12s;}
+.ai-mic:hover{background:var(--surface3);}
+.ai-mic.listening{background:#2e1a1a;border-color:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,85,85,.4);}50%{box-shadow:0 0 0 6px rgba(224,85,85,0);}}
+.ai-hint{font-size:11px;color:var(--text3);margin-bottom:8px;line-height:1.5;}
+.ai-quick{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.ai-quick-btn{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:none;color:var(--text3);cursor:pointer;transition:all .12s;font-family:'IBM Plex Sans',sans-serif;}
+.ai-quick-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-/* MOBILE */
+/* NOTIF BANNER */
+.notif-banner{position:fixed;top:1rem;right:1rem;background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius-lg);padding:12px 16px;z-index:9998;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.5);transform:translateX(120%);transition:transform .3s;}
+.notif-banner.show{transform:translateX(0);}
+.notif-title{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:4px;}
+.notif-body{font-size:12px;color:var(--text2);line-height:1.5;}
+.notif-close{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;}
+
 @media(max-width:640px){
   .sidebar{width:56px;min-width:56px;}
   .logo .name,.logo .sub,.nav-item span,.sidebar-date .month{display:none;}
   .nav-icon{width:auto;}
   .page{padding:1rem;}
+  .ai-header{padding:1rem;}
+  .ai-messages{padding:1rem;}
+  .ai-input-area{padding:.75rem 1rem 1rem;}
   .stat-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
 <body>
 <div id="toast"></div>
+<div id="notif-banner" class="notif-banner">
+  <button class="notif-close" onclick="closeNotif()">✕</button>
+  <div class="notif-title" id="notif-title"></div>
+  <div class="notif-body" id="notif-body"></div>
+</div>
 
 <div class="shell">
   <div class="sidebar">
@@ -166,7 +225,9 @@ select option{background:var(--surface2);}
       <div class="sub">Daily Tracker</div>
     </div>
     <nav class="nav">
-      <div class="nav-item active" onclick="showPage('delivery',this)"><span class="nav-icon">🚛</span><span>Delivery log</span></div>
+      <div class="nav-item active" onclick="showPage('home',this)"><span class="nav-icon">🏠</span><span>Home</span></div>
+      <div class="nav-item" onclick="showPage('assistant',this)"><span class="nav-icon">🤖</span><span>Claude assistant</span></div>
+      <div class="nav-item" onclick="showPage('delivery',this)"><span class="nav-icon">🚛</span><span>Delivery log</span></div>
       <div class="nav-item" onclick="showPage('university',this)"><span class="nav-icon">🎓</span><span>University</span></div>
       <div class="nav-item" onclick="showPage('schedule',this)"><span class="nav-icon">📅</span><span>My schedule</span></div>
       <div class="nav-item" onclick="showPage('history',this)"><span class="nav-icon">📦</span><span>Delivery history</span></div>
@@ -179,19 +240,46 @@ select option{background:var(--surface2);}
 
   <div class="main">
 
-    <!-- SETUP WARNING (shown until API URL is set) -->
-    <div id="setup-warning" style="display:none;padding:2rem;max-width:860px;">
-      <div class="api-warning">
-        <b>⚠️ One more step needed</b><br><br>
-        You need to paste your Google Apps Script URL below so this app can save your data.<br><br>
-        Paste your deployment URL here:<br><br>
-        <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/YOUR_ID/exec" style="background:#2a1f00;border:1px solid #4a3000;border-radius:8px;color:#f0f0f0;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 10px;width:100%;margin-bottom:10px;">
-        <button class="btn accent" onclick="saveApiUrl()">Save & connect ↗</button>
+    <!-- HOME / DAILY SUMMARY -->
+    <div class="page active" id="page-home">
+      <div id="summary-card" class="summary-card">
+        <div class="summary-greeting" id="summary-greeting">Good morning, Mehmet 👋</div>
+        <div class="summary-date" id="summary-date"></div>
+        <div class="summary-items" id="summary-items"><div style="color:var(--text3);font-size:13px;">Loading your day…</div></div>
+      </div>
+      <div id="upcoming-banner-home"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn accent" onclick="showPage('assistant',document.querySelectorAll('.nav-item')[1])">💬 Talk to Claude</button>
+        <button class="btn" onclick="showPage('delivery',document.querySelectorAll('.nav-item')[2])">🚛 Log delivery</button>
+        <button class="btn" onclick="showPage('schedule',document.querySelectorAll('.nav-item')[4])">📅 View schedule</button>
+      </div>
+    </div>
+
+    <!-- CLAUDE ASSISTANT -->
+    <div class="page ai-page" id="page-assistant">
+      <div class="ai-header">
+        <div class="ai-header-top">
+          <div class="ai-avatar">🤖</div>
+          <div>
+            <div class="ai-name">Claude</div>
+            <div class="ai-status">Online — your personal assistant</div>
+          </div>
+        </div>
+      </div>
+      <div class="ai-messages" id="ai-messages"></div>
+      <div class="ai-input-area">
+        <div class="ai-quick" id="ai-quick-btns"></div>
+        <div class="ai-hint">Type or use 🎤 to speak. Claude knows your shops, schedule and uni.</div>
+        <div class="ai-input-row">
+          <button class="ai-mic" id="mic-btn" onclick="toggleMic()" title="Hold to speak">🎤</button>
+          <textarea class="ai-textarea" id="ai-input" placeholder="e.g. I delivered 20kg meat to Boss Kebab and 10kg chicken to Smyrna, worked 8am to 2pm, made 350 PLN…" rows="1" onkeydown="aiKeydown(event)" oninput="autoResize(this)"></textarea>
+          <button class="ai-send" id="ai-send-btn" onclick="sendMessage()">➤</button>
+        </div>
       </div>
     </div>
 
     <!-- DELIVERY -->
-    <div class="page active" id="page-delivery">
+    <div class="page" id="page-delivery">
       <div class="page-title">Delivery log</div>
       <div class="page-sub" id="delivery-sub"></div>
       <div class="card">
@@ -208,24 +296,21 @@ select option{background:var(--surface2);}
         <div id="shops-list"></div>
         <hr class="divider">
         <div class="row">
-          <div class="field" style="flex:2;">
-            <label>Pick shop</label>
-            <select id="new-shop"><option value="">— select shop —</option></select>
-          </div>
+          <div class="field" style="flex:2;"><label>Pick shop</label><select id="new-shop"><option value="">— select shop —</option></select></div>
           <div class="field"><label>Meat (kg)</label><input type="number" id="new-meat" placeholder="0" step="0.1" min="0"></div>
           <div class="field"><label>Chicken (kg)</label><input type="number" id="new-chicken" placeholder="0" step="0.1" min="0"></div>
-          <div style="align-self:flex-end;"><button class="btn" onclick="addShop()">+ Add shop</button></div>
+          <div style="align-self:flex-end;"><button class="btn" onclick="addShop()">+ Add</button></div>
         </div>
         <div style="margin-top:6px;"><span style="font-size:11px;color:var(--text3);" id="shop-address-hint"></span></div>
       </div>
       <div class="card">
         <div class="card-label">Notes</div>
-        <div class="field"><textarea id="d-notes" placeholder="e.g. Owner of Ankara Kebab argued about last week's order…"></textarea></div>
+        <div class="field"><textarea id="d-notes" placeholder="e.g. Owner argued about weight at Boss Kebab…"></textarea></div>
       </div>
       <div class="stat-grid" id="d-stats" style="display:none;">
         <div class="stat"><div class="s-label">Hours worked</div><div class="s-value" id="stat-hours">—</div></div>
-        <div class="stat"><div class="s-label">Total kg delivered</div><div class="s-value" id="stat-kg">—</div></div>
-        <div class="stat"><div class="s-label">Earned today</div><div class="s-value" id="stat-money">—</div><div class="s-unit">PLN</div></div>
+        <div class="stat"><div class="s-label">Total kg</div><div class="s-value" id="stat-kg">—</div></div>
+        <div class="stat"><div class="s-label">Earned</div><div class="s-value" id="stat-money">—</div><div class="s-unit">PLN</div></div>
       </div>
       <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:.5rem;">
         <button class="btn" onclick="clearDeliveryForm()">Clear</button>
@@ -241,8 +326,7 @@ select option{background:var(--surface2);}
       <div class="card">
         <div class="card-label">Add event or deadline</div>
         <div class="row">
-          <div class="field">
-            <label>Type</label>
+          <div class="field"><label>Type</label>
             <select id="uni-type">
               <option value="exam">📝 Exam</option>
               <option value="assignment">⏰ Assignment deadline</option>
@@ -251,11 +335,11 @@ select option{background:var(--surface2);}
             </select>
           </div>
           <div class="field"><label>Date</label><input type="date" id="uni-date"></div>
-          <div class="field"><label>Time (optional)</label><input type="time" id="uni-time"></div>
+          <div class="field"><label>Time</label><input type="time" id="uni-time"></div>
         </div>
         <div class="row">
           <div class="field" style="flex:2;"><label>Subject / Title</label><input type="text" id="uni-title" placeholder="e.g. Network Security exam"></div>
-          <div class="field" style="flex:2;"><label>Details (optional)</label><input type="text" id="uni-details" placeholder="e.g. Room 208, Chapters 4–6"></div>
+          <div class="field" style="flex:2;"><label>Details</label><input type="text" id="uni-details" placeholder="e.g. Room 208, Chapters 4–6"></div>
         </div>
         <div style="text-align:right;"><button class="btn accent" onclick="saveUniEvent()">Add event ↗</button></div>
       </div>
@@ -265,15 +349,14 @@ select option{background:var(--surface2);}
     <!-- SCHEDULE -->
     <div class="page" id="page-schedule">
       <div class="page-title">My schedule</div>
-      <div class="page-sub">Weekly timetable + personal appointments</div>
+      <div class="page-sub">Timetable + personal appointments</div>
       <div class="card">
-        <div class="card-label">Add personal note / appointment</div>
+        <div class="card-label">Add appointment / personal note</div>
         <div class="row">
           <div class="field"><label>Date</label><input type="date" id="note-date"></div>
-          <div class="field"><label>Time (optional)</label><input type="time" id="note-time"></div>
-          <div class="field" style="flex:2;"><label>What is it</label><input type="text" id="note-title" placeholder="e.g. Doctor appointment, Barber, Call boss…"></div>
-          <div class="field" style="max-width:130px;">
-            <label>Color</label>
+          <div class="field"><label>Time</label><input type="time" id="note-time"></div>
+          <div class="field" style="flex:2;"><label>What is it</label><input type="text" id="note-title" placeholder="e.g. Doctor, Barber, Call boss…"></div>
+          <div class="field" style="max-width:120px;"><label>Color</label>
             <select id="note-color">
               <option value="purple">🟣 Purple</option>
               <option value="green">🟢 Green</option>
@@ -294,9 +377,9 @@ select option{background:var(--surface2);}
       <div class="card">
         <div class="card-label">Filter</div>
         <div class="filter-bar">
-          <div class="field"><label>From date</label><input type="date" id="h-from"></div>
-          <div class="field"><label>To date</label><input type="date" id="h-to"></div>
-          <div class="field"><label>Search shop</label><input type="text" id="h-shop" placeholder="Shop name…"></div>
+          <div class="field"><label>From</label><input type="date" id="h-from"></div>
+          <div class="field"><label>To</label><input type="date" id="h-to"></div>
+          <div class="field"><label>Shop</label><input type="text" id="h-shop" placeholder="Shop name…"></div>
           <button class="btn accent" onclick="applyFilter()">Filter</button>
           <button class="btn" onclick="clearFilter()">Clear</button>
         </div>
@@ -314,258 +397,599 @@ select option{background:var(--surface2);}
 
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbwfivX8C9_fNLBNw2cj6hJufvUq1BRhkqalkqRPiMXaio85L-QFirNKvJK463eNwP_F/exec';
-let API_URL = localStorage.getItem('mmt_api_url') || DEFAULT_API;
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwfivX8C9_fNLBNw2cj6hJufvUq1BRhkqalkqRPiMXaio85L-QFirNKvJK463eNwP_F/exec';
+const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
 
-function saveApiUrl() {
-  const v = document.getElementById('api-url-input').value.trim();
-  if (!v.startsWith('https://')) { toast('Please paste a valid URL', true); return; }
-  API_URL = v;
-  localStorage.setItem('mmt_api_url', v);
-  document.getElementById('setup-warning').style.display = 'none';
-  toast('Connected! Loading data…');
-  loadAll();
-}
-
-function checkSetup() {
-  // API URL is pre-configured, no setup needed
-  document.getElementById('setup-warning').style.display = 'none';
-}
-
-// ── SHOPS ─────────────────────────────────────────────────────────────────────
 const KNOWN_SHOPS = [
-  { name:'Warehouse',       address:'Skorupki 81, Ząbki' },
-  { name:'Boss Kebab',      address:'Skorupki 6, Ząbki' },
-  { name:'Smyrna Kebab',    address:'Mickiewicza 17' },
-  { name:'Aras Kebab',      address:'Ogrodowa 31' },
-  { name:'Mersi Kebab',     address:'Hrubieszowska 6' },
-  { name:'Safran Kebab',    address:'Górczewska 17C' },
-  { name:'Bemowo Kebab',    address:'Górczewska 200/17' },
-  { name:'Tandir Döner',    address:'Połczyńska 4' },
-  { name:'AD Anatolia',     address:'Kolorowa 19' },
-  { name:'Essa Kebab',      address:'Radziejowicka 183, Kałęczyn' },
-  { name:'Balkan Kebab',    address:'Kniaziewicza 45/lokal 15, Piaseczno' },
-  { name:'Kebab Nie Tylko', address:'Tadeusza Kościuszki 47A, Piaseczno' },
+  {name:'Warehouse',address:'Skorupki 81, Ząbki'},
+  {name:'Boss Kebab',address:'Skorupki 6, Ząbki'},
+  {name:'Smyrna Kebab',address:'Mickiewicza 17'},
+  {name:'Aras Kebab',address:'Ogrodowa 31'},
+  {name:'Mersi Kebab',address:'Hrubieszowska 6'},
+  {name:'Safran Kebab',address:'Górczewska 17C'},
+  {name:'Bemowo Kebab',address:'Górczewska 200/17'},
+  {name:'Tandir Döner',address:'Połczyńska 4'},
+  {name:'AD Anatolia',address:'Kolorowa 19'},
+  {name:'Essa Kebab',address:'Radziejowicka 183, Kałęczyn'},
+  {name:'Balkan Kebab',address:'Kniaziewicza 45/lokal 15, Piaseczno'},
+  {name:'Kebab Nie Tylko',address:'Tadeusza Kościuszki 47A, Piaseczno'},
 ];
 
-// ── WEEKLY TIMETABLE ─────────────────────────────────────────────────────────
 const WEEKLY = {
   1:[
-    {time:'10:00–11:30',subject:'Criminal Law and online crime',type:'W1',room:'Teams (online)',code:'TW'},
-    {time:'11:50–13:30',subject:'Introduction to Cryptology',type:'W1',room:'Teams (online)',code:'DL'},
-    {time:'13:55–15:35',subject:'Introduction to Cryptology',type:'L1',room:'Teams (online)',code:'DL'},
+    {time:'10:00–11:30',subject:'Criminal Law and online crime',type:'W1',room:'Teams',code:'TW'},
+    {time:'11:50–13:30',subject:'Introduction to Cryptology',type:'W1',room:'Teams',code:'DL'},
+    {time:'13:55–15:35',subject:'Introduction to Cryptology',type:'L1',room:'Teams',code:'DL'},
   ],
   2:[
     {time:'13:55–15:35',subject:'Network Security Systems',type:'W1',room:'Vizja 208',code:'OU'},
     {time:'15:45–17:25',subject:'Network Security Systems',type:'L1',room:'Vizja 213',code:'OU'},
   ],
   3:[
-    {time:'09:50–11:30',subject:'Basics of Secure Software Development',type:'W1',room:'Teams (online)',code:'PF'},
-    {time:'13:55–15:35',subject:'Software Engineering',type:'L1',room:'Teams (online)',code:'KG'},
+    {time:'09:50–11:30',subject:'Basics of Secure Software Dev',type:'W1',room:'Teams',code:'PF'},
+    {time:'13:55–15:35',subject:'Software Engineering',type:'L1',room:'Teams',code:'KG'},
   ],
   4:[
-    {time:'08:00–09:40',subject:'Software Engineering',type:'W1',room:'Teams (online)',code:''},
-    {time:'16:45–18:25',subject:'Basics of Secure Software Development',type:'L1',room:'Teams (online)',code:'DN'},
+    {time:'08:00–09:40',subject:'Software Engineering',type:'W1',room:'Teams',code:''},
+    {time:'16:45–18:25',subject:'Basics of Secure Software Dev',type:'L1',room:'Teams',code:'DN'},
   ],
   5:[],6:[],0:[],
 };
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let shopEntries = [];
-let allDeliveries = [];
-let allUni = [];
-let allNotes = [];
-const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const typeLabel={exam:'Exam',assignment:'Deadline',class:'Class/Lab',fixture:'Fixture'};
+const typeEmoji={exam:'📝',assignment:'⏰',class:'📖',fixture:'🏆'};
 
-// ── API ───────────────────────────────────────────────────────────────────────
-async function api(action, payload) {
-  if (!API_URL) { toast('Please set up your API URL first', true); return null; }
-  try {
-    if (payload) {
-      const r = await fetch(API_URL, {
-        method:'POST', body:JSON.stringify({action,...(payload?{payload}:{})})
-      });
+let shopEntries=[];
+let allDeliveries=[];
+let allUni=[];
+let allNotes=[];
+let chatHistory=[];
+let recognition=null;
+let isListening=false;
+let notifTimers=[];
+
+// ── SHEETS API ────────────────────────────────────────────────────────────────
+async function sheetsApi(action,payload){
+  try{
+    if(payload){
+      const r=await fetch(SHEETS_API,{method:'POST',body:JSON.stringify({action,payload})});
       return await r.json();
     } else {
-      const r = await fetch(`${API_URL}?action=${action}`);
+      const r=await fetch(`${SHEETS_API}?action=${action}`);
       return await r.json();
     }
-  } catch(e) {
-    toast('Connection error — check your internet', true);
-    return null;
-  }
+  } catch(e){ toast('Connection error',true); return null; }
 }
 
-async function loadAll() {
-  if (!API_URL) return;
-  const [d, u, n] = await Promise.all([
-    api('getDeliveries'), api('getUni'), api('getNotes')
+async function loadAll(){
+  const [d,u,n]=await Promise.all([
+    sheetsApi('getDeliveries'),sheetsApi('getUni'),sheetsApi('getNotes')
   ]);
-  if (d) allDeliveries = d;
-  if (u) allUni = u;
-  if (n) allNotes = n;
-  renderHistory();
-  renderUni();
+  if(d) allDeliveries=d;
+  if(u) allUni=u;
+  if(n) allNotes=n;
+  renderSummary();
   renderUpcoming();
+  renderUni();
   renderSchedule();
+  renderHistory();
+  scheduleNotifications();
 }
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
-function showPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  el.classList.add('active');
+function showPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(name==='assistant' && chatHistory.length===0) initChat();
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
-function toast(msg, isError) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = isError ? 'error' : '';
+function toast(msg,isError){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=isError?'error':'';
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+function scheduleNotifications(){
+  notifTimers.forEach(clearTimeout);
+  notifTimers=[];
+  if(!('Notification' in window)) return;
+
+  const now=new Date();
+  const todayStr=now.toISOString().split('T')[0];
+
+  // Today's classes
+  const dow=now.getDay();
+  (WEEKLY[dow]||[]).forEach(c=>{
+    const [h,m]=c.time.split('–')[0].split(':').map(Number);
+    const classTime=new Date(now);
+    classTime.setHours(h,m,0,0);
+    const remindAt=new Date(classTime.getTime()-60*60*1000);
+    const ms=remindAt-now;
+    if(ms>0){
+      const t=setTimeout(()=>showNotif('📖 Class starting in 1 hour',c.subject+' at '+c.time),ms);
+      notifTimers.push(t);
+    }
+  });
+
+  // Today's personal notes
+  allNotes.filter(n=>n.date===todayStr && n.time).forEach(n=>{
+    const [h,m]=n.time.split(':').map(Number);
+    const noteTime=new Date(now);
+    noteTime.setHours(h,m,0,0);
+    const remindAt=new Date(noteTime.getTime()-60*60*1000);
+    const ms=remindAt-now;
+    if(ms>0){
+      const t=setTimeout(()=>showNotif('📌 Reminder in 1 hour',n.title),ms);
+      notifTimers.push(t);
+    }
+  });
+
+  // Upcoming uni deadlines — notify day before at 9am
+  allUni.forEach(e=>{
+    const deadline=new Date(e.date+'T09:00:00');
+    const dayBefore=new Date(deadline.getTime()-24*60*60*1000);
+    const ms=dayBefore-now;
+    if(ms>0 && ms<48*60*60*1000){
+      const t=setTimeout(()=>showNotif('⏰ Tomorrow: '+typeLabel[e.type],e.title),ms);
+      notifTimers.push(t);
+    }
+  });
+}
+
+function showNotif(title,body){
+  document.getElementById('notif-title').textContent=title;
+  document.getElementById('notif-body').textContent=body;
+  const b=document.getElementById('notif-banner');
+  b.classList.add('show');
+  setTimeout(()=>b.classList.remove('show'),6000);
+  if(Notification.permission==='granted'){
+    new Notification(title,{body,icon:'https://mehmetuurs.github.io/Tracker/favicon.ico'});
+  }
+}
+
+function closeNotif(){ document.getElementById('notif-banner').classList.remove('show'); }
+
+function requestNotifPermission(){
+  if('Notification' in window && Notification.permission==='default'){
+    Notification.requestPermission();
+  }
+}
+
+// ── DAILY SUMMARY ─────────────────────────────────────────────────────────────
+function renderSummary(){
+  const now=new Date();
+  const hour=now.getHours();
+  const greeting=hour<12?'Good morning':hour<17?'Good afternoon':'Good evening';
+  document.getElementById('summary-greeting').textContent=
+    (hour<12?'Good morning':hour<17?'Good afternoon':'Good evening')+', Mehmet 👋';
+  document.getElementById('summary-date').textContent=
+    now.toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+
+  const todayStr=now.toISOString().split('T')[0];
+  const dow=now.getDay();
+  const items=[];
+
+  // Today's classes
+  const classes=WEEKLY[dow]||[];
+  if(classes.length){
+    classes.forEach(c=>items.push({dot:'blue',text:`${c.subject} at ${c.time} (${c.room})`}));
+  } else {
+    items.push({dot:'green',text:'No classes today'});
+  }
+
+  // Upcoming uni deadlines
+  const soon=allUni.filter(e=>{
+    const d=new Date(e.date+'T12:00');
+    const diff=(d-now)/(1000*60*60*24);
+    return diff>=0 && diff<=7;
+  });
+  soon.forEach(e=>{
+    const d=new Date(e.date+'T12:00');
+    const diff=Math.round((d-now)/(1000*60*60*24));
+    const when=diff===0?'today':diff===1?'tomorrow':`in ${diff} days`;
+    items.push({dot:'red',text:`${typeLabel[e.type]}: ${e.title} — ${when}`});
+  });
+
+  // Today's personal notes
+  const todayNotes=allNotes.filter(n=>n.date===todayStr);
+  todayNotes.forEach(n=>items.push({dot:'purple',text:`${n.title}${n.time?' at '+n.time:''}`}));
+
+  // Last delivery earnings
+  if(allDeliveries.length){
+    const last=allDeliveries[0];
+    items.push({dot:'green',text:`Last delivery: ${last.money.toFixed(2)} PLN on ${fmtDate(last.date)}`});
+  }
+
+  if(!items.length) items.push({dot:'',text:'Nothing scheduled today — enjoy your free time!'});
+
+  document.getElementById('summary-items').innerHTML=items.map(i=>
+    `<div class="summary-item"><div class="summary-dot ${i.dot}"></div><div>${i.text}</div></div>`
+  ).join('');
+
+  // Upcoming banner on home
+  renderUpcomingHome();
+}
+
+function renderUpcomingHome(){
+  const el=document.getElementById('upcoming-banner-home');
+  const today=new Date().toISOString().split('T')[0];
+  const all=[...allUni,...allNotes].filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  if(!all.length){el.innerHTML='';return;}
+  el.innerHTML=`<div class="upcoming-card" style="margin-bottom:1.25rem;">
+    <div class="upcoming-label">Coming up</div>
+    ${all.map(e=>`<div class="upcoming-item">
+      <span class="upcoming-name">${e.type?typeEmoji[e.type]:'📌'} ${e.title}</span>
+      <span class="upcoming-date">${fmtDate(e.date)}</span>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── CLAUDE AI CHAT ─────────────────────────────────────────────────────────────
+const SYSTEM_PROMPT=`You are Claude, a personal assistant built into Mehmet's daily tracker app. You know everything about Mehmet:
+
+PERSONAL:
+- Name: Mehmet Sürmeli, Turkish, living in Warsaw, Poland
+- CS student at Vizja university, 1st/2nd year
+- Works delivering meat to kebab shops in Warsaw area
+- Has a spouse and young child
+- Drives a 2006 BMW E90 325i
+- Loves Valorant, CS2, Football Manager, Fenerbahçe
+
+WORK - KNOWN SHOPS:
+${KNOWN_SHOPS.map(s=>`- ${s.name}: ${s.address}`).join('\n')}
+
+UNIVERSITY SCHEDULE (weekly):
+- Monday: Criminal Law 10:00-11:30, Cryptology 11:50-13:30 (W1) + 13:55-15:35 (L1)
+- Tuesday: Network Security 13:55-15:35 Vizja 208 (W1) + 15:45-17:25 Vizja 213 (L1)
+- Wednesday: Secure Software Dev 09:50-11:30 (W1), Software Engineering 13:55-15:35 (L1)
+- Thursday: Software Engineering 08:00-09:40 (W1), Secure Software Dev 16:45-18:25 (L1)
+
+YOUR JOB:
+You help Mehmet log his daily life naturally. When he tells you about his day, extract data and return a JSON action block so the app can save it automatically.
+
+ACTIONS YOU CAN TAKE (return as JSON in a code block):
+1. Save delivery: {"action":"saveDelivery","data":{"date":"YYYY-MM-DD","start":"HH:MM","end":"HH:MM","money":NUMBER,"notes":"...","shops":[{"name":"Shop Name","meat":NUMBER,"chicken":NUMBER}]}}
+2. Save uni event: {"action":"saveUni","data":{"type":"exam|assignment|class|fixture","date":"YYYY-MM-DD","time":"HH:MM","title":"...","details":"..."}}
+3. Save personal note: {"action":"saveNote","data":{"date":"YYYY-MM-DD","time":"HH:MM","title":"...","color":"purple|green|red|blue"}}
+
+RULES:
+- Always respond in a friendly, warm, conversational way — like a helpful friend
+- If Mehmet describes his delivery day, extract ALL shop names and quantities mentioned
+- Match shop names flexibly (e.g. "Boss" = "Boss Kebab", "Smyrna" = "Smyrna Kebab")
+- If date not mentioned, assume today
+- If you extract data, also explain what you saved in plain language
+- If something is unclear, ask one simple question
+- Keep responses short and natural — no bullet points, just chat
+- Today's date is: ${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}`;
+
+const QUICK_PROMPTS=[
+  "What's on today?",
+  "Log my delivery day",
+  "Add an exam deadline",
+  "Add appointment",
+  "How much did I earn this week?",
+];
+
+function initChat(){
+  chatHistory=[];
+  document.getElementById('ai-messages').innerHTML='';
+  const qEl=document.getElementById('ai-quick-btns');
+  qEl.innerHTML=QUICK_PROMPTS.map(q=>`<button class="ai-quick-btn" onclick="useQuick('${q}')">${q}</button>`).join('');
+  appendMessage('claude',`Hey Mehmet! 👋 I'm Claude, your personal assistant. I know your shops, your university schedule, everything.\n\nJust talk to me naturally — tell me about your delivery day, ask me to add a deadline, or ask what's coming up. What can I do for you?`);
+}
+
+function useQuick(text){
+  document.getElementById('ai-input').value=text;
+  sendMessage();
+}
+
+function appendMessage(role,text){
+  const el=document.getElementById('ai-messages');
+  const div=document.createElement('div');
+  div.className='msg '+role;
+  const avatar=role==='claude'?'🤖':'👤';
+  const formatted=text.replace(/\n/g,'<br>');
+  div.innerHTML=`<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${formatted}</div>`;
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+  return div;
+}
+
+function appendTyping(){
+  const el=document.getElementById('ai-messages');
+  const div=document.createElement('div');
+  div.className='msg claude';
+  div.id='typing-indicator';
+  div.innerHTML=`<div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+}
+
+function removeTyping(){
+  const t=document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+
+async function sendMessage(){
+  const input=document.getElementById('ai-input');
+  const text=input.value.trim();
+  if(!text) return;
+  input.value='';
+  autoResize(input);
+  document.getElementById('ai-send-btn').disabled=true;
+  document.getElementById('ai-quick-btns').innerHTML='';
+
+  appendMessage('user',text);
+  chatHistory.push({role:'user',content:text});
+  appendTyping();
+
+  // Build context about current data
+  const todayStr=new Date().toISOString().split('T')[0];
+  const recentDeliveries=allDeliveries.slice(0,5).map(d=>
+    `${fmtDate(d.date)}: ${d.shops.map(s=>`${s.name} ${s.meat}kg meat ${s.chicken}kg chicken`).join(', ')} — ${d.money} PLN`
+  ).join('\n');
+  const upcomingUni=allUni.filter(e=>e.date>=todayStr).slice(0,5).map(e=>
+    `${typeLabel[e.type]}: ${e.title} on ${fmtDate(e.date)}`
+  ).join('\n');
+
+  const contextualSystem=SYSTEM_PROMPT+
+    `\n\nRECENT DELIVERIES:\n${recentDeliveries||'None yet'}`+
+    `\n\nUPCOMING UNI EVENTS:\n${upcomingUni||'None'}`;
+
+  try{
+    const res=await fetch(CLAUDE_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','x-api-key':''},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:contextualSystem,
+        messages:chatHistory
+      })
+    });
+    const data=await res.json();
+    removeTyping();
+
+    const reply=data.content?.[0]?.text||'Sorry, something went wrong. Try again!';
+    chatHistory.push({role:'assistant',content:reply});
+
+    // Extract JSON action if present
+    const jsonMatch=reply.match(/```json\n?([\s\S]*?)\n?```/);
+    let displayText=reply.replace(/```json[\s\S]*?```/g,'').trim();
+    appendMessage('claude',displayText||reply);
+
+    if(jsonMatch){
+      try{
+        const action=JSON.parse(jsonMatch[1]);
+        await executeAiAction(action);
+      } catch(e){}
+    }
+  } catch(e){
+    removeTyping();
+    appendMessage('claude','Sorry, I had trouble connecting. Check your internet and try again!');
+  }
+  document.getElementById('ai-send-btn').disabled=false;
+}
+
+async function executeAiAction(action){
+  if(action.action==='saveDelivery'){
+    const res=await sheetsApi('saveDelivery',action.data);
+    if(res?.ok){
+      allDeliveries.unshift({id:res.id,...action.data});
+      renderHistory(); renderSummary();
+      toast('Delivery saved by Claude ✓');
+    }
+  } else if(action.action==='saveUni'){
+    const res=await sheetsApi('saveUni',action.data);
+    if(res?.ok){
+      allUni.push({id:res.id,...action.data});
+      allUni.sort((a,b)=>a.date.localeCompare(b.date));
+      renderUni(); renderUpcoming(); renderSummary();
+      scheduleNotifications();
+      toast('Event saved by Claude ✓');
+    }
+  } else if(action.action==='saveNote'){
+    const res=await sheetsApi('saveNote',action.data);
+    if(res?.ok){
+      allNotes.push({id:res.id,...action.data});
+      allNotes.sort((a,b)=>a.date.localeCompare(b.date));
+      renderSchedule(); renderSummary();
+      scheduleNotifications();
+      toast('Note saved by Claude ✓');
+    }
+  }
+}
+
+function aiKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+}
+
+// ── VOICE INPUT ───────────────────────────────────────────────────────────────
+function toggleMic(){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
+    toast('Voice not supported in this browser — use Chrome',true);
+    return;
+  }
+  if(isListening){ stopMic(); return; }
+  startMic();
+}
+
+function startMic(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SR();
+  recognition.lang='en-US';
+  recognition.continuous=false;
+  recognition.interimResults=true;
+  const btn=document.getElementById('mic-btn');
+  btn.classList.add('listening');
+  btn.textContent='🔴';
+  isListening=true;
+
+  recognition.onresult=(e)=>{
+    let interim='';
+    let final='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) final+=e.results[i][0].transcript;
+      else interim+=e.results[i][0].transcript;
+    }
+    document.getElementById('ai-input').value=final||interim;
+  };
+  recognition.onend=()=>{ stopMic(); if(document.getElementById('ai-input').value.trim()) sendMessage(); };
+  recognition.onerror=()=>stopMic();
+  recognition.start();
+}
+
+function stopMic(){
+  if(recognition) recognition.stop();
+  const btn=document.getElementById('mic-btn');
+  btn.classList.remove('listening');
+  btn.textContent='🎤';
+  isListening=false;
 }
 
 // ── DELIVERY FORM ─────────────────────────────────────────────────────────────
-function initShopDropdown() {
-  const sel = document.getElementById('new-shop');
-  KNOWN_SHOPS.forEach(s => {
-    const o = document.createElement('option');
-    o.value = s.name; o.textContent = s.name;
-    sel.appendChild(o);
+function initShopDropdown(){
+  const sel=document.getElementById('new-shop');
+  KNOWN_SHOPS.forEach(s=>{
+    const o=document.createElement('option');
+    o.value=s.name;o.textContent=s.name;sel.appendChild(o);
   });
-  sel.addEventListener('change', () => {
-    const f = KNOWN_SHOPS.find(s => s.name === sel.value);
-    document.getElementById('shop-address-hint').textContent = f ? '📍 ' + f.address : '';
+  sel.addEventListener('change',()=>{
+    const f=KNOWN_SHOPS.find(s=>s.name===sel.value);
+    document.getElementById('shop-address-hint').textContent=f?'📍 '+f.address:'';
   });
 }
 
-function addShop() {
-  const sel = document.getElementById('new-shop');
-  const name = sel.value.trim();
-  const meat = parseFloat(document.getElementById('new-meat').value) || 0;
-  const chicken = parseFloat(document.getElementById('new-chicken').value) || 0;
-  if (!name) { toast('Please select a shop', true); return; }
-  if (shopEntries.find(s => s.name === name)) { toast('Already added this shop', true); return; }
-  shopEntries.push({name, meat, chicken});
-  sel.value = '';
-  document.getElementById('shop-address-hint').textContent = '';
-  document.getElementById('new-meat').value = '';
-  document.getElementById('new-chicken').value = '';
+function addShop(){
+  const sel=document.getElementById('new-shop');
+  const name=sel.value.trim();
+  const meat=parseFloat(document.getElementById('new-meat').value)||0;
+  const chicken=parseFloat(document.getElementById('new-chicken').value)||0;
+  if(!name){toast('Please select a shop',true);return;}
+  if(shopEntries.find(s=>s.name===name)){toast('Already added',true);return;}
+  shopEntries.push({name,meat,chicken});
+  sel.value='';
+  document.getElementById('shop-address-hint').textContent='';
+  document.getElementById('new-meat').value='';
+  document.getElementById('new-chicken').value='';
   renderShops();
 }
 
-function removeShop(i) { shopEntries.splice(i,1); renderShops(); }
+function removeShop(i){shopEntries.splice(i,1);renderShops();}
 
-function renderShops() {
-  const el = document.getElementById('shops-list');
-  if (!shopEntries.length) { el.innerHTML = ''; updateStats(); return; }
-  el.innerHTML = shopEntries.map((s,i) => {
-    const f = KNOWN_SHOPS.find(k => k.name === s.name);
+function renderShops(){
+  const el=document.getElementById('shops-list');
+  if(!shopEntries.length){el.innerHTML='';updateStats();return;}
+  el.innerHTML=shopEntries.map((s,i)=>{
+    const f=KNOWN_SHOPS.find(k=>k.name===s.name);
     return `<div class="shop-item">
       <div style="flex:2;">
         <div class="shop-name">${s.name}</div>
         ${f?`<div style="font-size:11px;color:var(--text3);margin-top:2px;">📍 ${f.address}</div>`:''}
       </div>
-      ${s.meat>0?`<span class="shop-tag tag-meat">${s.meat.toFixed(1)} kg meat</span>`:''}
-      ${s.chicken>0?`<span class="shop-tag tag-chicken">${s.chicken.toFixed(1)} kg chicken</span>`:''}
+      ${s.meat>0?`<span class="shop-tag tag-meat">${s.meat.toFixed(1)}kg meat</span>`:''}
+      ${s.chicken>0?`<span class="shop-tag tag-chicken">${s.chicken.toFixed(1)}kg chicken</span>`:''}
       <button class="btn danger small" onclick="removeShop(${i})">✕</button>
     </div>`;
   }).join('');
   updateStats();
 }
 
-function updateStats() {
-  const start = document.getElementById('d-start').value;
-  const end   = document.getElementById('d-end').value;
-  const money = parseFloat(document.getElementById('d-money').value) || 0;
-  const totalKg = shopEntries.reduce((a,s) => a+s.meat+s.chicken, 0);
-  if (!shopEntries.length && !start) { document.getElementById('d-stats').style.display='none'; return; }
+function updateStats(){
+  const start=document.getElementById('d-start').value;
+  const end=document.getElementById('d-end').value;
+  const money=parseFloat(document.getElementById('d-money').value)||0;
+  const totalKg=shopEntries.reduce((a,s)=>a+s.meat+s.chicken,0);
+  if(!shopEntries.length&&!start){document.getElementById('d-stats').style.display='none';return;}
   document.getElementById('d-stats').style.display='grid';
-  let h = '—';
-  if (start && end) {
-    const [sh,sm]=start.split(':').map(Number), [eh,em]=end.split(':').map(Number);
+  let h='—';
+  if(start&&end){
+    const [sh,sm]=start.split(':').map(Number),[eh,em]=end.split(':').map(Number);
     const m=(eh*60+em)-(sh*60+sm);
     if(m>0) h=(m/60).toFixed(1)+'h';
   }
-  document.getElementById('stat-hours').textContent = h;
-  document.getElementById('stat-kg').textContent = totalKg.toFixed(1);
-  document.getElementById('stat-money').textContent = money>0?money.toFixed(2):'—';
+  document.getElementById('stat-hours').textContent=h;
+  document.getElementById('stat-kg').textContent=totalKg.toFixed(1);
+  document.getElementById('stat-money').textContent=money>0?money.toFixed(2):'—';
 }
 
-['d-start','d-end','d-money'].forEach(id =>
-  document.getElementById(id).addEventListener('input', updateStats));
+['d-start','d-end','d-money'].forEach(id=>
+  document.getElementById(id).addEventListener('input',updateStats));
 
-async function saveDelivery() {
-  const date  = document.getElementById('d-date').value;
-  const start = document.getElementById('d-start').value;
-  const end   = document.getElementById('d-end').value;
-  const money = parseFloat(document.getElementById('d-money').value) || 0;
-  const notes = document.getElementById('d-notes').value.trim();
-  if (!date||!start) { toast('Please fill in date and start time', true); return; }
-  if (!shopEntries.length) { toast('Please add at least one shop', true); return; }
-  const btn = document.getElementById('save-delivery-btn');
-  btn.disabled = true; btn.innerHTML = '<span class="loader"></span>Saving…';
-  const res = await api('saveDelivery', {date,start,end,money,notes,shops:[...shopEntries]});
-  btn.disabled = false; btn.innerHTML = 'Save delivery day ↗';
-  if (!res?.ok) { toast('Error saving — try again', true); return; }
-  allDeliveries.unshift({id:res.id, date,start,end,money,notes,shops:[...shopEntries]});
-  shopEntries = [];
-  renderShops();
-  document.getElementById('d-start').value='';
-  document.getElementById('d-end').value='';
-  document.getElementById('d-money').value='';
-  document.getElementById('d-notes').value='';
+async function saveDelivery(){
+  const date=document.getElementById('d-date').value;
+  const start=document.getElementById('d-start').value;
+  const end=document.getElementById('d-end').value;
+  const money=parseFloat(document.getElementById('d-money').value)||0;
+  const notes=document.getElementById('d-notes').value.trim();
+  if(!date||!start){toast('Fill in date and start time',true);return;}
+  if(!shopEntries.length){toast('Add at least one shop',true);return;}
+  const btn=document.getElementById('save-delivery-btn');
+  btn.disabled=true;btn.innerHTML='<span class="loader"></span>Saving…';
+  const res=await sheetsApi('saveDelivery',{date,start,end,money,notes,shops:[...shopEntries]});
+  btn.disabled=false;btn.innerHTML='Save delivery day ↗';
+  if(!res?.ok){toast('Error saving',true);return;}
+  allDeliveries.unshift({id:res.id,date,start,end,money,notes,shops:[...shopEntries]});
+  shopEntries=[];renderShops();
+  ['d-start','d-end','d-money','d-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('d-stats').style.display='none';
-  renderHistory();
-  toast('Delivery day saved! ✓');
+  renderHistory();renderSummary();
+  toast('Delivery saved! ✓');
 }
 
-function clearDeliveryForm() {
+function clearDeliveryForm(){
   shopEntries=[];renderShops();
   ['d-start','d-end','d-money','d-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('d-stats').style.display='none';
 }
 
 // ── UNIVERSITY ────────────────────────────────────────────────────────────────
-const typeLabel={exam:'Exam',assignment:'Deadline',class:'Class/Lab',fixture:'Fixture'};
-const typeEmoji={exam:'📝',assignment:'⏰',class:'📖',fixture:'🏆'};
-
-async function saveUniEvent() {
+async function saveUniEvent(){
   const type=document.getElementById('uni-type').value;
   const date=document.getElementById('uni-date').value;
   const time=document.getElementById('uni-time').value;
   const title=document.getElementById('uni-title').value.trim();
   const details=document.getElementById('uni-details').value.trim();
-  if (!date||!title) { toast('Please fill in date and title', true); return; }
-  const res = await api('saveUni', {type,date,time,title,details});
-  if (!res?.ok) { toast('Error saving', true); return; }
+  if(!date||!title){toast('Fill in date and title',true);return;}
+  const res=await sheetsApi('saveUni',{type,date,time,title,details});
+  if(!res?.ok){toast('Error saving',true);return;}
   allUni.push({id:res.id,type,date,time,title,details});
   allUni.sort((a,b)=>a.date.localeCompare(b.date));
   ['uni-date','uni-time','uni-title','uni-details'].forEach(id=>document.getElementById(id).value='');
-  renderUni(); renderUpcoming();
+  renderUni();renderUpcoming();renderSummary();scheduleNotifications();
   toast('Event added! ✓');
 }
 
-async function deleteUni(id) {
-  if (!confirm('Delete this event?')) return;
-  const res = await api('deleteUni', {id});
-  if (!res?.ok) { toast('Error deleting', true); return; }
-  allUni = allUni.filter(e=>e.id!==id);
-  renderUni(); renderUpcoming();
+async function deleteUni(id){
+  if(!confirm('Delete this event?'))return;
+  const res=await sheetsApi('deleteUni',{id});
+  if(!res?.ok){toast('Error',true);return;}
+  allUni=allUni.filter(e=>e.id!==id);
+  renderUni();renderUpcoming();renderSummary();
   toast('Deleted');
 }
 
-function renderUni() {
+function renderUni(){
   const el=document.getElementById('uni-list');
   const today=new Date().toISOString().split('T')[0];
-  if (!allUni.length) { el.innerHTML='<div class="empty">No events yet. Add an exam or deadline above.</div>'; return; }
+  if(!allUni.length){el.innerHTML='<div class="empty">No events yet.</div>';return;}
   const upcoming=allUni.filter(e=>e.date>=today);
   const past=allUni.filter(e=>e.date<today);
-  const renderGroup=(events,title,isPast)=>{
-    if (!events.length) return '';
-    return `<div class="uni-section-label">${title}</div>`+events.map(e=>`
+  const rg=(events,title,isPast)=>{
+    if(!events.length)return'';
+    return`<div class="uni-section-label">${title}</div>`+events.map(e=>`
       <div class="uni-item ${isPast?'past':''}">
         <div class="uni-left">
           <div class="uni-title-row">
@@ -578,14 +1002,15 @@ function renderUni() {
         <button class="btn danger small" onclick="deleteUni('${e.id}')">Delete</button>
       </div>`).join('');
   };
-  el.innerHTML=renderGroup(upcoming,'⬆ Upcoming',false)+(past.length?renderGroup(past,'Past',true):'');
+  el.innerHTML=rg(upcoming,'⬆ Upcoming',false)+(past.length?rg(past,'Past',true):'');
 }
 
-function renderUpcoming() {
+function renderUpcoming(){
   const el=document.getElementById('upcoming-banner');
+  if(!el)return;
   const today=new Date().toISOString().split('T')[0];
   const all=[...allUni,...allNotes].filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
-  if (!all.length) { el.innerHTML=''; return; }
+  if(!all.length){el.innerHTML='';return;}
   el.innerHTML=`<div class="upcoming-card"><div class="upcoming-label">Coming up</div>${all.map(e=>`
     <div class="upcoming-item">
       <span class="upcoming-name">${e.type?typeEmoji[e.type]:'📌'} ${e.title}</span>
@@ -593,177 +1018,134 @@ function renderUpcoming() {
     </div>`).join('')}</div>`;
 }
 
-// ── PERSONAL NOTES ────────────────────────────────────────────────────────────
-async function saveNote() {
+// ── NOTES / SCHEDULE ──────────────────────────────────────────────────────────
+async function saveNote(){
   const date=document.getElementById('note-date').value;
   const time=document.getElementById('note-time').value;
   const title=document.getElementById('note-title').value.trim();
   const color=document.getElementById('note-color').value;
-  if (!date||!title) { toast('Please fill in date and what it is', true); return; }
-  const res = await api('saveNote', {date,time,title,color});
-  if (!res?.ok) { toast('Error saving', true); return; }
+  if(!date||!title){toast('Fill in date and description',true);return;}
+  const res=await sheetsApi('saveNote',{date,time,title,color});
+  if(!res?.ok){toast('Error saving',true);return;}
   allNotes.push({id:res.id,date,time,title,color});
   allNotes.sort((a,b)=>a.date.localeCompare(b.date));
   document.getElementById('note-date').value='';
   document.getElementById('note-time').value='';
   document.getElementById('note-title').value='';
-  renderSchedule(); renderUpcoming();
+  renderSchedule();renderSummary();scheduleNotifications();
   toast('Note added! ✓');
 }
 
-async function deleteNote(id) {
-  if (!confirm('Delete this note?')) return;
-  const res = await api('deleteNote', {id});
-  if (!res?.ok) { toast('Error deleting', true); return; }
-  allNotes = allNotes.filter(n=>n.id!==id);
-  renderSchedule(); renderUpcoming();
+async function deleteNote(id){
+  if(!confirm('Delete?'))return;
+  const res=await sheetsApi('deleteNote',{id});
+  if(!res?.ok){toast('Error',true);return;}
+  allNotes=allNotes.filter(n=>n.id!==id);
+  renderSchedule();renderSummary();
   toast('Deleted');
 }
 
-// ── SCHEDULE ──────────────────────────────────────────────────────────────────
-function renderSchedule() {
+function renderSchedule(){
   const el=document.getElementById('schedule-view');
   const today=new Date();
-  const todayDow=today.getDay();
-  const todayStr=today.toISOString().split('T')[0];
-
-  // Build 14 days from today
   let html='';
   const typeColor={W1:'badge-class',L1:'badge-fixture'};
-
-  for (let i=0;i<14;i++) {
-    const d=new Date(today);
-    d.setDate(today.getDate()+i);
+  for(let i=0;i<14;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);
     const dow=d.getDay();
     const ds=d.toISOString().split('T')[0];
     const label=i===0?'Today':i===1?'Tomorrow':dayNames[dow];
-    const dStr=fmtDate(ds);
-
     const classes=WEEKLY[dow]||[];
     const notes=allNotes.filter(n=>n.date===ds);
-
-    if (!classes.length && !notes.length) continue;
-
-    html+=`<div class="schedule-day">
-      <div class="schedule-day-label">${label} — ${dStr}</div>`;
-
-    classes.forEach(c=>{
-      html+=`<div class="schedule-item">
-        <div class="sched-time">${c.time}</div>
-        <div class="sched-info">
-          <div class="sched-subject">${c.subject}</div>
-          <div class="sched-meta">
-            <span class="badge ${typeColor[c.type]||'badge-class'}">${c.type}</span>
-            &nbsp;${c.room}${c.code?' · '+c.code:''}
-          </div>
-        </div>
-      </div>`;
-    });
-
-    notes.forEach(n=>{
-      html+=`<div class="sched-note-item">
-        <div class="sched-time">${n.time||'—'}</div>
-        <div class="sched-info">
-          <span class="badge badge-${n.color||'note'}">📌 Personal</span>
-          <span class="sched-note-text" style="margin-left:8px;">${n.title}</span>
-        </div>
-        <button class="btn danger small" onclick="deleteNote('${n.id}')">✕</button>
-      </div>`;
-    });
-
+    if(!classes.length&&!notes.length)continue;
+    html+=`<div class="schedule-day"><div class="schedule-day-label">${label} — ${fmtDate(ds)}</div>`;
+    classes.forEach(c=>{html+=`<div class="schedule-item">
+      <div class="sched-time">${c.time}</div>
+      <div class="sched-info">
+        <div class="sched-subject">${c.subject}</div>
+        <div class="sched-meta"><span class="badge ${typeColor[c.type]||'badge-class'}">${c.type}</span> ${c.room}${c.code?' · '+c.code:''}</div>
+      </div></div>`;});
+    notes.forEach(n=>{html+=`<div class="sched-note-item">
+      <div class="sched-time">${n.time||'—'}</div>
+      <div class="sched-info">
+        <span class="badge badge-${n.color||'purple'}">📌 Personal</span>
+        <span class="sched-note-text" style="margin-left:8px;">${n.title}</span>
+      </div>
+      <button class="btn danger small" onclick="deleteNote('${n.id}')">✕</button>
+    </div>`;});
     html+=`</div>`;
   }
-  el.innerHTML=html||'<div class="empty">No classes or notes in the next 14 days.</div>';
+  el.innerHTML=html||'<div class="empty">No classes or notes in next 14 days.</div>';
 }
 
 // ── HISTORY ───────────────────────────────────────────────────────────────────
-function applyFilter() {
-  const from=document.getElementById('h-from').value;
-  const to=document.getElementById('h-to').value;
-  const shopQ=document.getElementById('h-shop').value.trim().toLowerCase();
-  renderHistory(from,to,shopQ);
+function applyFilter(){
+  renderHistory(document.getElementById('h-from').value,document.getElementById('h-to').value,document.getElementById('h-shop').value.trim().toLowerCase());
 }
-
-function clearFilter() {
+function clearFilter(){
   ['h-from','h-to','h-shop'].forEach(id=>document.getElementById(id).value='');
   renderHistory();
 }
 
-async function deleteDelivery(id) {
-  if (!confirm('Delete this delivery day?')) return;
-  const res = await api('deleteDelivery', {id});
-  if (!res?.ok) { toast('Error deleting', true); return; }
-  allDeliveries = allDeliveries.filter(d=>d.id!==id);
-  renderHistory();
+async function deleteDelivery(id){
+  if(!confirm('Delete this delivery day?'))return;
+  const res=await sheetsApi('deleteDelivery',{id});
+  if(!res?.ok){toast('Error',true);return;}
+  allDeliveries=allDeliveries.filter(d=>d.id!==id);
+  renderHistory();renderSummary();
   toast('Deleted');
 }
 
-function renderHistory(from,to,shopQ) {
+function renderHistory(from,to,shopQ){
   const el=document.getElementById('history-list');
-  if (!API_URL) { el.innerHTML='<div class="empty">Connect to Google Sheets first.</div>'; return; }
-  if (!allDeliveries.length) { el.innerHTML='<div class="empty">No delivery days saved yet.</div>'; document.getElementById('h-stats').style.display='none'; return; }
-
+  if(!allDeliveries.length){el.innerHTML='<div class="empty">No delivery days saved yet.</div>';document.getElementById('h-stats').style.display='none';return;}
   let filtered=allDeliveries.filter(d=>{
-    if (from&&d.date<from) return false;
-    if (to&&d.date>to) return false;
-    if (shopQ&&!d.shops.some(s=>s.name.toLowerCase().includes(shopQ))) return false;
+    if(from&&d.date<from)return false;
+    if(to&&d.date>to)return false;
+    if(shopQ&&!d.shops.some(s=>s.name.toLowerCase().includes(shopQ)))return false;
     return true;
   });
-
-  if (!filtered.length) { el.innerHTML='<div class="empty">No deliveries match your filter.</div>'; document.getElementById('h-stats').style.display='none'; return; }
-
+  if(!filtered.length){el.innerHTML='<div class="empty">No deliveries match.</div>';document.getElementById('h-stats').style.display='none';return;}
   const totalMoney=filtered.reduce((a,d)=>a+d.money,0);
   const totalKg=filtered.reduce((a,d)=>d.shops.reduce((b,s)=>b+s.meat+s.chicken,0)+a,0);
   document.getElementById('h-stats').style.display='grid';
   document.getElementById('hs-count').textContent=filtered.length;
   document.getElementById('hs-kg').textContent=totalKg.toFixed(1);
   document.getElementById('hs-money').textContent=totalMoney.toFixed(2);
-
   el.innerHTML=filtered.map(d=>{
-    let hoursStr='';
-    if (d.start&&d.end) {
-      const [sh,sm]=d.start.split(':').map(Number),[eh,em]=d.end.split(':').map(Number);
-      const m=(eh*60+em)-(sh*60+sm);
-      if(m>0) hoursStr=(m/60).toFixed(1)+'h · ';
-    }
-    const shopLines=d.shops.map(s=>{
-      const f=KNOWN_SHOPS.find(k=>k.name===s.name);
-      return `<b>${s.name}</b>${f?` <span style="color:var(--text3);font-size:11px;">(${f.address})</span>`:''}: ${s.meat.toFixed(1)}kg meat + ${s.chicken.toFixed(1)}kg chicken`;
-    }).join('<br>');
-    return `<div class="delivery-entry">
+    let h='';
+    if(d.start&&d.end){const[sh,sm]=d.start.split(':').map(Number),[eh,em]=d.end.split(':').map(Number);const m=(eh*60+em)-(sh*60+sm);if(m>0)h=(m/60).toFixed(1)+'h · ';}
+    const lines=d.shops.map(s=>{const f=KNOWN_SHOPS.find(k=>k.name===s.name);return`<b>${s.name}</b>${f?` <span style="color:var(--text3);font-size:11px;">(${f.address})</span>`:''}: ${s.meat.toFixed(1)}kg meat + ${s.chicken.toFixed(1)}kg chicken`;}).join('<br>');
+    return`<div class="delivery-entry">
       <div class="delivery-header">
         <div>
           <div class="delivery-date">${fmtDate(d.date)} — ${dayNames[new Date(d.date+'T12:00').getDay()]}</div>
-          <div class="delivery-time">${hoursStr}${d.start}${d.end?' → '+d.end:''}</div>
+          <div class="delivery-time">${h}${d.start}${d.end?' → '+d.end:''}</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <span class="badge badge-money">${d.money.toFixed(2)} PLN</span>
           <button class="btn danger small" onclick="deleteDelivery('${d.id}')">Delete</button>
         </div>
       </div>
-      <div class="delivery-shops">${shopLines}</div>
+      <div class="delivery-shops">${lines}</div>
       ${d.notes?`<div class="delivery-note">${d.notes}</div>`:''}
     </div>`;
   }).join('');
 }
 
 // ── UTILS ─────────────────────────────────────────────────────────────────────
-function fmtDate(iso) {
-  if (!iso) return '';
-  const [y,m,d]=iso.split('-');
-  return `${d}.${m}.${y}`;
-}
+function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}.${m}.${y}`;}
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-function init() {
+function init(){
   const now=new Date();
   document.getElementById('sb-day').textContent=now.getDate();
   document.getElementById('sb-month').textContent=now.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
   document.getElementById('delivery-sub').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
   document.getElementById('d-date').value=now.toISOString().split('T')[0];
   initShopDropdown();
-  checkSetup();
-  if (API_URL) loadAll();
+  requestNotifPermission();
+  loadAll();
 }
 
 init();
