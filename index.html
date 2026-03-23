@@ -664,6 +664,7 @@ RULES:
 - If Mehmet describes his delivery day, extract ALL shop names and quantities mentioned
 - Match shop names flexibly (e.g. "Boss" = "Boss Kebab", "Smyrna" = "Smyrna Kebab")
 - If date not mentioned, assume today
+- If someone says they started work at e.g. 19:00 and finished at 02:00, that is an overnight shift — the start date is the day they began, end time is next morning
 - If you extract data, also explain what you saved in plain language
 - If something is unclear, ask one simple question
 - Keep responses short and natural — no bullet points, just chat
@@ -917,8 +918,9 @@ function updateStats(){
   let h='—';
   if(start&&end){
     const [sh,sm]=start.split(':').map(Number),[eh,em]=end.split(':').map(Number);
-    const m=(eh*60+em)-(sh*60+sm);
-    if(m>0) h=(m/60).toFixed(1)+'h';
+    let m=(eh*60+em)-(sh*60+sm);
+    if(m<=0) m+=24*60;
+    h=(m/60).toFixed(1)+'h';
   }
   document.getElementById('stat-hours').textContent=h;
   document.getElementById('stat-kg').textContent=totalKg.toFixed(1);
@@ -1114,7 +1116,7 @@ function renderHistory(from,to,shopQ){
   document.getElementById('hs-money').textContent=totalMoney.toFixed(2);
   el.innerHTML=filtered.map(d=>{
     let h='';
-    if(d.start&&d.end){const[sh,sm]=d.start.split(':').map(Number),[eh,em]=d.end.split(':').map(Number);const m=(eh*60+em)-(sh*60+sm);if(m>0)h=(m/60).toFixed(1)+'h · ';}
+    if(d.start&&d.end){const[sh,sm]=d.start.split(':').map(Number),[eh,em]=d.end.split(':').map(Number);let m=(eh*60+em)-(sh*60+sm);if(m<=0)m+=24*60;h=(m/60).toFixed(1)+'h · ';}
     const lines=d.shops.map(s=>{const f=KNOWN_SHOPS.find(k=>k.name===s.name);return`<b>${s.name}</b>${f?` <span style="color:var(--text3);font-size:11px;">(${f.address})</span>`:''}: ${s.meat.toFixed(1)}kg meat + ${s.chicken.toFixed(1)}kg chicken`;}).join('<br>');
     return`<div class="delivery-entry">
       <div class="delivery-header">
