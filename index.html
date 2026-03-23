@@ -453,15 +453,31 @@ let notifTimers=[];
 // ── SHEETS API ────────────────────────────────────────────────────────────────
 async function sheetsApi(action,payload){
   return new Promise((resolve)=>{
-    const url = payload
-      ? SHEETS_API+'?action='+action+'&data='+encodeURIComponent(JSON.stringify(payload))
-      : SHEETS_API+'?action='+action;
-    const script = document.createElement('script');
-    const cbName = 'cb_'+Date.now();
-    window[cbName] = (data)=>{ delete window[cbName]; script.remove(); resolve(data); };
-    script.src = url+'&callback='+cbName;
-    script.onerror = ()=>{ delete window[cbName]; script.remove(); toast('Connection error',true); resolve(null); };
-    document.head.appendChild(script);
+    const cbName='cb'+Date.now()+Math.floor(Math.random()*9999);
+    const url=SHEETS_API+'?action='+encodeURIComponent(action)+
+      (payload?'&data='+encodeURIComponent(JSON.stringify(payload)):'')+
+      '&callback='+cbName+'&t='+Date.now();
+    window[cbName]=(data)=>{
+      try{delete window[cbName];}catch(e){}
+      try{document.getElementById(cbName).remove();}catch(e){}
+      resolve(data);
+    };
+    const s=document.createElement('script');
+    s.id=cbName;
+    s.src=url;
+    s.onerror=()=>{
+      try{delete window[cbName];}catch(e){}
+      try{s.remove();}catch(e){}
+      resolve(null);
+    };
+    document.body.appendChild(s);
+    setTimeout(()=>{
+      if(window[cbName]){
+        try{delete window[cbName];}catch(e){}
+        try{s.remove();}catch(e){}
+        resolve(null);
+      }
+    },15000);
   });
 }
 
