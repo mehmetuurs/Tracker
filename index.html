@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mehmet's Tracker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root {
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#232323;--surface3:#2c2c2c;
+  --border:#333;--border2:#444;--text:#f0f0f0;--text2:#999;--text3:#666;
+  --accent:#e8b84b;--accent2:#c49a2e;--red:#e05555;--green:#4caf7d;
+  --blue:#5b9bd5;--purple:#9b7fd4;--radius:8px;--radius-lg:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+.shell{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;}
+.logo{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid var(--border);}
+.logo .name{font-size:15px;font-weight:600;color:var(--accent);}
+.logo .sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:'IBM Plex Mono',monospace;}
+.nav{padding:1rem 0;flex:1;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 1.25rem;color:var(--text2);cursor:pointer;transition:all .12s;font-size:13px;border-left:3px solid transparent;user-select:none;}
+.nav-item:hover{color:var(--text);background:var(--surface2);}
+.nav-item.active{color:var(--accent);background:var(--surface2);border-left-color:var(--accent);font-weight:500;}
+.nav-icon{font-size:15px;width:18px;text-align:center;}
+.sidebar-date{padding:1rem 1.25rem;border-top:1px solid var(--border);font-family:'IBM Plex Mono',monospace;}
+.sidebar-date .day{font-size:22px;font-weight:600;color:var(--text);}
+.sidebar-date .month{font-size:11px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.08em;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;}
+.page{display:none;padding:2rem;max-width:860px;}
+.page.active{display:block;}
+.page-title{font-size:22px;font-weight:600;color:var(--text);margin-bottom:.25rem;}
+.page-sub{font-size:13px;color:var(--text3);margin-bottom:1.75rem;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;}
+.card-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;}
+
+/* FORM */
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-end;}
+.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:120px;}
+.field label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:500;}
+.field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:13px;padding:8px 10px;transition:border-color .12s;width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);}
+.field textarea{resize:vertical;min-height:60px;}
+select option{background:var(--surface2);}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border2);background:none;color:var(--text2);font-family:'IBM Plex Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.btn:hover{background:var(--surface3);color:var(--text);}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:#000;font-weight:600;}
+.btn.accent:hover{background:var(--accent2);border-color:var(--accent2);}
+.btn.danger{color:var(--red);border-color:#4a2828;}
+.btn.danger:hover{background:#2a1a1a;}
+.btn.small{padding:4px 10px;font-size:11px;}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem;}
+.stat{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.stat .s-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.stat .s-value{font-size:24px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:var(--accent);}
+.stat .s-unit{font-size:11px;color:var(--text3);margin-top:2px;}
+
+.divider{border:none;border-top:1px solid var(--border);margin:1rem 0;}
+
+/* SHOP ITEMS */
+.shop-item{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:8px;}
+.shop-name{font-weight:500;flex:2;color:var(--text);font-size:13px;}
+.shop-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:4px;}
+.tag-meat{background:#2a1f0e;color:#e8b84b;border:1px solid #4a3520;}
+.tag-chicken{background:#0e2a1a;color:#4caf7d;border:1px solid #1a4a2a;}
+
+/* DELIVERY ENTRIES */
+.delivery-entry{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:10px;}
+.delivery-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.delivery-date{font-size:13px;font-weight:600;color:var(--text);}
+.delivery-time{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:2px;}
+.delivery-shops{font-size:12px;color:var(--text2);line-height:1.9;margin-top:6px;}
+.delivery-note{font-size:12px;color:var(--text3);font-style:italic;margin-top:4px;}
+
+/* BADGES */
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em;}
+.badge-money{background:#1a2e1a;color:var(--green);border:1px solid #2a4a2a;}
+.badge-exam{background:#2e1a1a;color:var(--red);border:1px solid #4a2a2a;}
+.badge-assignment{background:#2a1f0e;color:var(--accent);border:1px solid #4a3520;}
+.badge-class{background:#1a2234;color:var(--blue);border:1px solid #2a3a54;}
+.badge-fixture{background:#221a34;color:var(--purple);border:1px solid #3a2a54;}
+.badge-note{background:#1e1a2e;color:#b09fd4;border:1px solid #3a2a54;}
+.badge-green{background:#0e2a1a;color:#4caf7d;border:1px solid #1a4a2a;}
+.badge-red{background:#2e1a1a;color:#e05555;border:1px solid #4a2a2a;}
+.badge-blue{background:#1a2234;color:#5b9bd5;border:1px solid #2a3a54;}
+
+/* UNI / NOTES */
+.uni-section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:1.25rem 0 .6rem;}
+.uni-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:8px;}
+.uni-item.past{opacity:.45;}
+.uni-left{flex:1;}
+.uni-title-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+.uni-title{font-size:13px;font-weight:500;color:var(--text);}
+.uni-detail{font-size:12px;color:var(--text3);}
+.uni-time{font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text3);margin-top:3px;}
+
+/* SCHEDULE */
+.schedule-day{margin-bottom:1.25rem;}
+.schedule-day-label{font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.schedule-item{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);}
+.sched-time{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);min-width:100px;padding-top:2px;}
+.sched-info{flex:1;}
+.sched-subject{font-size:13px;font-weight:500;color:var(--text);}
+.sched-meta{font-size:11px;color:var(--text3);margin-top:2px;}
+.sched-note-item{display:flex;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);background:none;}
+.sched-note-text{font-size:13px;color:var(--text2);flex:1;}
+
+/* FILTER */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem;}
+.filter-bar .field{min-width:130px;}
+
+/* UPCOMING BANNER */
+.upcoming-card{background:linear-gradient(135deg,#1a1500,#231a00);border:1px solid #4a3520;border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;}
+.upcoming-label{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+.upcoming-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #2a1f0e;}
+.upcoming-item:last-child{border-bottom:none;}
+.upcoming-name{font-size:13px;color:var(--text);font-weight:500;}
+.upcoming-date{font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--accent);}
+
+/* LOADER */
+.loader{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-row{display:flex;align-items:center;color:var(--text3);font-size:13px;padding:2rem 0;}
+
+/* TOAST */
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--accent);color:#000;font-weight:600;font-size:13px;padding:10px 18px;border-radius:var(--radius);opacity:0;transform:translateY(10px);transition:all .2s;pointer-events:none;z-index:9999;}
+#toast.show{opacity:1;transform:translateY(0);}
+#toast.error{background:var(--red);color:#fff;}
+
+.empty{text-align:center;color:var(--text3);font-size:13px;padding:3rem 0;}
+
+/* API WARNING */
+.api-warning{background:#1a1000;border:1px solid #4a3000;border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;font-size:13px;color:#c8982a;line-height:1.6;}
+.api-warning b{color:var(--accent);}
+.api-warning code{background:#2a1f00;padding:2px 6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;word-break:break-all;}
+
+/* MOBILE */
+@media(max-width:640px){
+  .sidebar{width:56px;min-width:56px;}
+  .logo .name,.logo .sub,.nav-item span,.sidebar-date .month{display:none;}
+  .nav-icon{width:auto;}
+  .page{padding:1rem;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<div class="shell">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="name">Mehmet S.</div>
+      <div class="sub">Daily Tracker</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active" onclick="showPage('delivery',this)"><span class="nav-icon">🚛</span><span>Delivery log</span></div>
+      <div class="nav-item" onclick="showPage('university',this)"><span class="nav-icon">🎓</span><span>University</span></div>
+      <div class="nav-item" onclick="showPage('schedule',this)"><span class="nav-icon">📅</span><span>My schedule</span></div>
+      <div class="nav-item" onclick="showPage('history',this)"><span class="nav-icon">📦</span><span>Delivery history</span></div>
+    </nav>
+    <div class="sidebar-date">
+      <div class="day" id="sb-day"></div>
+      <div class="month" id="sb-month"></div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- SETUP WARNING (shown until API URL is set) -->
+    <div id="setup-warning" style="display:none;padding:2rem;max-width:860px;">
+      <div class="api-warning">
+        <b>⚠️ One more step needed</b><br><br>
+        You need to paste your Google Apps Script URL below so this app can save your data.<br><br>
+        Paste your deployment URL here:<br><br>
+        <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/YOUR_ID/exec" style="background:#2a1f00;border:1px solid #4a3000;border-radius:8px;color:#f0f0f0;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 10px;width:100%;margin-bottom:10px;">
+        <button class="btn accent" onclick="saveApiUrl()">Save & connect ↗</button>
+      </div>
+    </div>
+
+    <!-- DELIVERY -->
+    <div class="page active" id="page-delivery">
+      <div class="page-title">Delivery log</div>
+      <div class="page-sub" id="delivery-sub"></div>
+      <div class="card">
+        <div class="card-label">Work hours & pay</div>
+        <div class="row">
+          <div class="field"><label>Date</label><input type="date" id="d-date"></div>
+          <div class="field"><label>Started work</label><input type="time" id="d-start"></div>
+          <div class="field"><label>Got home</label><input type="time" id="d-end"></div>
+          <div class="field"><label>Money earned (PLN)</label><input type="number" id="d-money" placeholder="0.00" step="0.01" min="0"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Shops visited today</div>
+        <div id="shops-list"></div>
+        <hr class="divider">
+        <div class="row">
+          <div class="field" style="flex:2;">
+            <label>Pick shop</label>
+            <select id="new-shop"><option value="">— select shop —</option></select>
+          </div>
+          <div class="field"><label>Meat (kg)</label><input type="number" id="new-meat" placeholder="0" step="0.1" min="0"></div>
+          <div class="field"><label>Chicken (kg)</label><input type="number" id="new-chicken" placeholder="0" step="0.1" min="0"></div>
+          <div style="align-self:flex-end;"><button class="btn" onclick="addShop()">+ Add shop</button></div>
+        </div>
+        <div style="margin-top:6px;"><span style="font-size:11px;color:var(--text3);" id="shop-address-hint"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Notes</div>
+        <div class="field"><textarea id="d-notes" placeholder="e.g. Owner of Ankara Kebab argued about last week's order…"></textarea></div>
+      </div>
+      <div class="stat-grid" id="d-stats" style="display:none;">
+        <div class="stat"><div class="s-label">Hours worked</div><div class="s-value" id="stat-hours">—</div></div>
+        <div class="stat"><div class="s-label">Total kg delivered</div><div class="s-value" id="stat-kg">—</div></div>
+        <div class="stat"><div class="s-label">Earned today</div><div class="s-value" id="stat-money">—</div><div class="s-unit">PLN</div></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:.5rem;">
+        <button class="btn" onclick="clearDeliveryForm()">Clear</button>
+        <button class="btn accent" id="save-delivery-btn" onclick="saveDelivery()">Save delivery day ↗</button>
+      </div>
+    </div>
+
+    <!-- UNIVERSITY -->
+    <div class="page" id="page-university">
+      <div class="page-title">University</div>
+      <div class="page-sub">Exams, assignments, deadlines</div>
+      <div id="upcoming-banner"></div>
+      <div class="card">
+        <div class="card-label">Add event or deadline</div>
+        <div class="row">
+          <div class="field">
+            <label>Type</label>
+            <select id="uni-type">
+              <option value="exam">📝 Exam</option>
+              <option value="assignment">⏰ Assignment deadline</option>
+              <option value="class">📖 Extra class / Lab</option>
+              <option value="fixture">🏆 Fixture / other</option>
+            </select>
+          </div>
+          <div class="field"><label>Date</label><input type="date" id="uni-date"></div>
+          <div class="field"><label>Time (optional)</label><input type="time" id="uni-time"></div>
+        </div>
+        <div class="row">
+          <div class="field" style="flex:2;"><label>Subject / Title</label><input type="text" id="uni-title" placeholder="e.g. Network Security exam"></div>
+          <div class="field" style="flex:2;"><label>Details (optional)</label><input type="text" id="uni-details" placeholder="e.g. Room 208, Chapters 4–6"></div>
+        </div>
+        <div style="text-align:right;"><button class="btn accent" onclick="saveUniEvent()">Add event ↗</button></div>
+      </div>
+      <div id="uni-list"></div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="page" id="page-schedule">
+      <div class="page-title">My schedule</div>
+      <div class="page-sub">Weekly timetable + personal appointments</div>
+      <div class="card">
+        <div class="card-label">Add personal note / appointment</div>
+        <div class="row">
+          <div class="field"><label>Date</label><input type="date" id="note-date"></div>
+          <div class="field"><label>Time (optional)</label><input type="time" id="note-time"></div>
+          <div class="field" style="flex:2;"><label>What is it</label><input type="text" id="note-title" placeholder="e.g. Doctor appointment, Barber, Call boss…"></div>
+          <div class="field" style="max-width:130px;">
+            <label>Color</label>
+            <select id="note-color">
+              <option value="purple">🟣 Purple</option>
+              <option value="green">🟢 Green</option>
+              <option value="red">🔴 Red</option>
+              <option value="blue">🔵 Blue</option>
+            </select>
+          </div>
+          <div style="align-self:flex-end;"><button class="btn accent" onclick="saveNote()">Add ↗</button></div>
+        </div>
+      </div>
+      <div id="schedule-view"></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="page" id="page-history">
+      <div class="page-title">Delivery history</div>
+      <div class="page-sub">All past delivery days</div>
+      <div class="card">
+        <div class="card-label">Filter</div>
+        <div class="filter-bar">
+          <div class="field"><label>From date</label><input type="date" id="h-from"></div>
+          <div class="field"><label>To date</label><input type="date" id="h-to"></div>
+          <div class="field"><label>Search shop</label><input type="text" id="h-shop" placeholder="Shop name…"></div>
+          <button class="btn accent" onclick="applyFilter()">Filter</button>
+          <button class="btn" onclick="clearFilter()">Clear</button>
+        </div>
+      </div>
+      <div class="stat-grid" id="h-stats" style="display:none;">
+        <div class="stat"><div class="s-label">Deliveries</div><div class="s-value" id="hs-count">0</div></div>
+        <div class="stat"><div class="s-label">Total kg</div><div class="s-value" id="hs-kg">0</div></div>
+        <div class="stat"><div class="s-label">Total earned</div><div class="s-value" id="hs-money">0</div><div class="s-unit">PLN</div></div>
+      </div>
+      <div id="history-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbwfivX8C9_fNLBNw2cj6hJufvUq1BRhkqalkqRPiMXaio85L-QFirNKvJK463eNwP_F/exec';
+let API_URL = localStorage.getItem('mmt_api_url') || DEFAULT_API;
+
+function saveApiUrl() {
+  const v = document.getElementById('api-url-input').value.trim();
+  if (!v.startsWith('https://')) { toast('Please paste a valid URL', true); return; }
+  API_URL = v;
+  localStorage.setItem('mmt_api_url', v);
+  document.getElementById('setup-warning').style.display = 'none';
+  toast('Connected! Loading data…');
+  loadAll();
+}
+
+function checkSetup() {
+  // API URL is pre-configured, no setup needed
+  document.getElementById('setup-warning').style.display = 'none';
+}
+
+// ── SHOPS ─────────────────────────────────────────────────────────────────────
+const KNOWN_SHOPS = [
+  { name:'Warehouse',       address:'Skorupki 81, Ząbki' },
+  { name:'Boss Kebab',      address:'Skorupki 6, Ząbki' },
+  { name:'Smyrna Kebab',    address:'Mickiewicza 17' },
+  { name:'Aras Kebab',      address:'Ogrodowa 31' },
+  { name:'Mersi Kebab',     address:'Hrubieszowska 6' },
+  { name:'Safran Kebab',    address:'Górczewska 17C' },
+  { name:'Bemowo Kebab',    address:'Górczewska 200/17' },
+  { name:'Tandir Döner',    address:'Połczyńska 4' },
+  { name:'AD Anatolia',     address:'Kolorowa 19' },
+  { name:'Essa Kebab',      address:'Radziejowicka 183, Kałęczyn' },
+  { name:'Balkan Kebab',    address:'Kniaziewicza 45/lokal 15, Piaseczno' },
+  { name:'Kebab Nie Tylko', address:'Tadeusza Kościuszki 47A, Piaseczno' },
+];
+
+// ── WEEKLY TIMETABLE ─────────────────────────────────────────────────────────
+const WEEKLY = {
+  1:[
+    {time:'10:00–11:30',subject:'Criminal Law and online crime',type:'W1',room:'Teams (online)',code:'TW'},
+    {time:'11:50–13:30',subject:'Introduction to Cryptology',type:'W1',room:'Teams (online)',code:'DL'},
+    {time:'13:55–15:35',subject:'Introduction to Cryptology',type:'L1',room:'Teams (online)',code:'DL'},
+  ],
+  2:[
+    {time:'13:55–15:35',subject:'Network Security Systems',type:'W1',room:'Vizja 208',code:'OU'},
+    {time:'15:45–17:25',subject:'Network Security Systems',type:'L1',room:'Vizja 213',code:'OU'},
+  ],
+  3:[
+    {time:'09:50–11:30',subject:'Basics of Secure Software Development',type:'W1',room:'Teams (online)',code:'PF'},
+    {time:'13:55–15:35',subject:'Software Engineering',type:'L1',room:'Teams (online)',code:'KG'},
+  ],
+  4:[
+    {time:'08:00–09:40',subject:'Software Engineering',type:'W1',room:'Teams (online)',code:''},
+    {time:'16:45–18:25',subject:'Basics of Secure Software Development',type:'L1',room:'Teams (online)',code:'DN'},
+  ],
+  5:[],6:[],0:[],
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let shopEntries = [];
+let allDeliveries = [];
+let allUni = [];
+let allNotes = [];
+const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+// ── API ───────────────────────────────────────────────────────────────────────
+async function api(action, payload) {
+  if (!API_URL) { toast('Please set up your API URL first', true); return null; }
+  try {
+    if (payload) {
+      const r = await fetch(API_URL, {
+        method:'POST', body:JSON.stringify({action,...(payload?{payload}:{})})
+      });
+      return await r.json();
+    } else {
+      const r = await fetch(`${API_URL}?action=${action}`);
+      return await r.json();
+    }
+  } catch(e) {
+    toast('Connection error — check your internet', true);
+    return null;
+  }
+}
+
+async function loadAll() {
+  if (!API_URL) return;
+  const [d, u, n] = await Promise.all([
+    api('getDeliveries'), api('getUni'), api('getNotes')
+  ]);
+  if (d) allDeliveries = d;
+  if (u) allUni = u;
+  if (n) allNotes = n;
+  renderHistory();
+  renderUni();
+  renderUpcoming();
+  renderSchedule();
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isError ? 'error' : '';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── DELIVERY FORM ─────────────────────────────────────────────────────────────
+function initShopDropdown() {
+  const sel = document.getElementById('new-shop');
+  KNOWN_SHOPS.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s.name; o.textContent = s.name;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', () => {
+    const f = KNOWN_SHOPS.find(s => s.name === sel.value);
+    document.getElementById('shop-address-hint').textContent = f ? '📍 ' + f.address : '';
+  });
+}
+
+function addShop() {
+  const sel = document.getElementById('new-shop');
+  const name = sel.value.trim();
+  const meat = parseFloat(document.getElementById('new-meat').value) || 0;
+  const chicken = parseFloat(document.getElementById('new-chicken').value) || 0;
+  if (!name) { toast('Please select a shop', true); return; }
+  if (shopEntries.find(s => s.name === name)) { toast('Already added this shop', true); return; }
+  shopEntries.push({name, meat, chicken});
+  sel.value = '';
+  document.getElementById('shop-address-hint').textContent = '';
+  document.getElementById('new-meat').value = '';
+  document.getElementById('new-chicken').value = '';
+  renderShops();
+}
+
+function removeShop(i) { shopEntries.splice(i,1); renderShops(); }
+
+function renderShops() {
+  const el = document.getElementById('shops-list');
+  if (!shopEntries.length) { el.innerHTML = ''; updateStats(); return; }
+  el.innerHTML = shopEntries.map((s,i) => {
+    const f = KNOWN_SHOPS.find(k => k.name === s.name);
+    return `<div class="shop-item">
+      <div style="flex:2;">
+        <div class="shop-name">${s.name}</div>
+        ${f?`<div style="font-size:11px;color:var(--text3);margin-top:2px;">📍 ${f.address}</div>`:''}
+      </div>
+      ${s.meat>0?`<span class="shop-tag tag-meat">${s.meat.toFixed(1)} kg meat</span>`:''}
+      ${s.chicken>0?`<span class="shop-tag tag-chicken">${s.chicken.toFixed(1)} kg chicken</span>`:''}
+      <button class="btn danger small" onclick="removeShop(${i})">✕</button>
+    </div>`;
+  }).join('');
+  updateStats();
+}
+
+function updateStats() {
+  const start = document.getElementById('d-start').value;
+  const end   = document.getElementById('d-end').value;
+  const money = parseFloat(document.getElementById('d-money').value) || 0;
+  const totalKg = shopEntries.reduce((a,s) => a+s.meat+s.chicken, 0);
+  if (!shopEntries.length && !start) { document.getElementById('d-stats').style.display='none'; return; }
+  document.getElementById('d-stats').style.display='grid';
+  let h = '—';
+  if (start && end) {
+    const [sh,sm]=start.split(':').map(Number), [eh,em]=end.split(':').map(Number);
+    const m=(eh*60+em)-(sh*60+sm);
+    if(m>0) h=(m/60).toFixed(1)+'h';
+  }
+  document.getElementById('stat-hours').textContent = h;
+  document.getElementById('stat-kg').textContent = totalKg.toFixed(1);
+  document.getElementById('stat-money').textContent = money>0?money.toFixed(2):'—';
+}
+
+['d-start','d-end','d-money'].forEach(id =>
+  document.getElementById(id).addEventListener('input', updateStats));
+
+async function saveDelivery() {
+  const date  = document.getElementById('d-date').value;
+  const start = document.getElementById('d-start').value;
+  const end   = document.getElementById('d-end').value;
+  const money = parseFloat(document.getElementById('d-money').value) || 0;
+  const notes = document.getElementById('d-notes').value.trim();
+  if (!date||!start) { toast('Please fill in date and start time', true); return; }
+  if (!shopEntries.length) { toast('Please add at least one shop', true); return; }
+  const btn = document.getElementById('save-delivery-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="loader"></span>Saving…';
+  const res = await api('saveDelivery', {date,start,end,money,notes,shops:[...shopEntries]});
+  btn.disabled = false; btn.innerHTML = 'Save delivery day ↗';
+  if (!res?.ok) { toast('Error saving — try again', true); return; }
+  allDeliveries.unshift({id:res.id, date,start,end,money,notes,shops:[...shopEntries]});
+  shopEntries = [];
+  renderShops();
+  document.getElementById('d-start').value='';
+  document.getElementById('d-end').value='';
+  document.getElementById('d-money').value='';
+  document.getElementById('d-notes').value='';
+  document.getElementById('d-stats').style.display='none';
+  renderHistory();
+  toast('Delivery day saved! ✓');
+}
+
+function clearDeliveryForm() {
+  shopEntries=[];renderShops();
+  ['d-start','d-end','d-money','d-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('d-stats').style.display='none';
+}
+
+// ── UNIVERSITY ────────────────────────────────────────────────────────────────
+const typeLabel={exam:'Exam',assignment:'Deadline',class:'Class/Lab',fixture:'Fixture'};
+const typeEmoji={exam:'📝',assignment:'⏰',class:'📖',fixture:'🏆'};
+
+async function saveUniEvent() {
+  const type=document.getElementById('uni-type').value;
+  const date=document.getElementById('uni-date').value;
+  const time=document.getElementById('uni-time').value;
+  const title=document.getElementById('uni-title').value.trim();
+  const details=document.getElementById('uni-details').value.trim();
+  if (!date||!title) { toast('Please fill in date and title', true); return; }
+  const res = await api('saveUni', {type,date,time,title,details});
+  if (!res?.ok) { toast('Error saving', true); return; }
+  allUni.push({id:res.id,type,date,time,title,details});
+  allUni.sort((a,b)=>a.date.localeCompare(b.date));
+  ['uni-date','uni-time','uni-title','uni-details'].forEach(id=>document.getElementById(id).value='');
+  renderUni(); renderUpcoming();
+  toast('Event added! ✓');
+}
+
+async function deleteUni(id) {
+  if (!confirm('Delete this event?')) return;
+  const res = await api('deleteUni', {id});
+  if (!res?.ok) { toast('Error deleting', true); return; }
+  allUni = allUni.filter(e=>e.id!==id);
+  renderUni(); renderUpcoming();
+  toast('Deleted');
+}
+
+function renderUni() {
+  const el=document.getElementById('uni-list');
+  const today=new Date().toISOString().split('T')[0];
+  if (!allUni.length) { el.innerHTML='<div class="empty">No events yet. Add an exam or deadline above.</div>'; return; }
+  const upcoming=allUni.filter(e=>e.date>=today);
+  const past=allUni.filter(e=>e.date<today);
+  const renderGroup=(events,title,isPast)=>{
+    if (!events.length) return '';
+    return `<div class="uni-section-label">${title}</div>`+events.map(e=>`
+      <div class="uni-item ${isPast?'past':''}">
+        <div class="uni-left">
+          <div class="uni-title-row">
+            <span class="badge badge-${e.type}">${typeEmoji[e.type]} ${typeLabel[e.type]}</span>
+            <span class="uni-title">${e.title}</span>
+          </div>
+          ${e.details?`<div class="uni-detail">${e.details}</div>`:''}
+          <div class="uni-time">${fmtDate(e.date)}${e.time?' · '+e.time:''}</div>
+        </div>
+        <button class="btn danger small" onclick="deleteUni('${e.id}')">Delete</button>
+      </div>`).join('');
+  };
+  el.innerHTML=renderGroup(upcoming,'⬆ Upcoming',false)+(past.length?renderGroup(past,'Past',true):'');
+}
+
+function renderUpcoming() {
+  const el=document.getElementById('upcoming-banner');
+  const today=new Date().toISOString().split('T')[0];
+  const all=[...allUni,...allNotes].filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  if (!all.length) { el.innerHTML=''; return; }
+  el.innerHTML=`<div class="upcoming-card"><div class="upcoming-label">Coming up</div>${all.map(e=>`
+    <div class="upcoming-item">
+      <span class="upcoming-name">${e.type?typeEmoji[e.type]:'📌'} ${e.title}</span>
+      <span class="upcoming-date">${fmtDate(e.date)}</span>
+    </div>`).join('')}</div>`;
+}
+
+// ── PERSONAL NOTES ────────────────────────────────────────────────────────────
+async function saveNote() {
+  const date=document.getElementById('note-date').value;
+  const time=document.getElementById('note-time').value;
+  const title=document.getElementById('note-title').value.trim();
+  const color=document.getElementById('note-color').value;
+  if (!date||!title) { toast('Please fill in date and what it is', true); return; }
+  const res = await api('saveNote', {date,time,title,color});
+  if (!res?.ok) { toast('Error saving', true); return; }
+  allNotes.push({id:res.id,date,time,title,color});
+  allNotes.sort((a,b)=>a.date.localeCompare(b.date));
+  document.getElementById('note-date').value='';
+  document.getElementById('note-time').value='';
+  document.getElementById('note-title').value='';
+  renderSchedule(); renderUpcoming();
+  toast('Note added! ✓');
+}
+
+async function deleteNote(id) {
+  if (!confirm('Delete this note?')) return;
+  const res = await api('deleteNote', {id});
+  if (!res?.ok) { toast('Error deleting', true); return; }
+  allNotes = allNotes.filter(n=>n.id!==id);
+  renderSchedule(); renderUpcoming();
+  toast('Deleted');
+}
+
+// ── SCHEDULE ──────────────────────────────────────────────────────────────────
+function renderSchedule() {
+  const el=document.getElementById('schedule-view');
+  const today=new Date();
+  const todayDow=today.getDay();
+  const todayStr=today.toISOString().split('T')[0];
+
+  // Build 14 days from today
+  let html='';
+  const typeColor={W1:'badge-class',L1:'badge-fixture'};
+
+  for (let i=0;i<14;i++) {
+    const d=new Date(today);
+    d.setDate(today.getDate()+i);
+    const dow=d.getDay();
+    const ds=d.toISOString().split('T')[0];
+    const label=i===0?'Today':i===1?'Tomorrow':dayNames[dow];
+    const dStr=fmtDate(ds);
+
+    const classes=WEEKLY[dow]||[];
+    const notes=allNotes.filter(n=>n.date===ds);
+
+    if (!classes.length && !notes.length) continue;
+
+    html+=`<div class="schedule-day">
+      <div class="schedule-day-label">${label} — ${dStr}</div>`;
+
+    classes.forEach(c=>{
+      html+=`<div class="schedule-item">
+        <div class="sched-time">${c.time}</div>
+        <div class="sched-info">
+          <div class="sched-subject">${c.subject}</div>
+          <div class="sched-meta">
+            <span class="badge ${typeColor[c.type]||'badge-class'}">${c.type}</span>
+            &nbsp;${c.room}${c.code?' · '+c.code:''}
+          </div>
+        </div>
+      </div>`;
+    });
+
+    notes.forEach(n=>{
+      html+=`<div class="sched-note-item">
+        <div class="sched-time">${n.time||'—'}</div>
+        <div class="sched-info">
+          <span class="badge badge-${n.color||'note'}">📌 Personal</span>
+          <span class="sched-note-text" style="margin-left:8px;">${n.title}</span>
+        </div>
+        <button class="btn danger small" onclick="deleteNote('${n.id}')">✕</button>
+      </div>`;
+    });
+
+    html+=`</div>`;
+  }
+  el.innerHTML=html||'<div class="empty">No classes or notes in the next 14 days.</div>';
+}
+
+// ── HISTORY ───────────────────────────────────────────────────────────────────
+function applyFilter() {
+  const from=document.getElementById('h-from').value;
+  const to=document.getElementById('h-to').value;
+  const shopQ=document.getElementById('h-shop').value.trim().toLowerCase();
+  renderHistory(from,to,shopQ);
+}
+
+function clearFilter() {
+  ['h-from','h-to','h-shop'].forEach(id=>document.getElementById(id).value='');
+  renderHistory();
+}
+
+async function deleteDelivery(id) {
+  if (!confirm('Delete this delivery day?')) return;
+  const res = await api('deleteDelivery', {id});
+  if (!res?.ok) { toast('Error deleting', true); return; }
+  allDeliveries = allDeliveries.filter(d=>d.id!==id);
+  renderHistory();
+  toast('Deleted');
+}
+
+function renderHistory(from,to,shopQ) {
+  const el=document.getElementById('history-list');
+  if (!API_URL) { el.innerHTML='<div class="empty">Connect to Google Sheets first.</div>'; return; }
+  if (!allDeliveries.length) { el.innerHTML='<div class="empty">No delivery days saved yet.</div>'; document.getElementById('h-stats').style.display='none'; return; }
+
+  let filtered=allDeliveries.filter(d=>{
+    if (from&&d.date<from) return false;
+    if (to&&d.date>to) return false;
+    if (shopQ&&!d.shops.some(s=>s.name.toLowerCase().includes(shopQ))) return false;
+    return true;
+  });
+
+  if (!filtered.length) { el.innerHTML='<div class="empty">No deliveries match your filter.</div>'; document.getElementById('h-stats').style.display='none'; return; }
+
+  const totalMoney=filtered.reduce((a,d)=>a+d.money,0);
+  const totalKg=filtered.reduce((a,d)=>d.shops.reduce((b,s)=>b+s.meat+s.chicken,0)+a,0);
+  document.getElementById('h-stats').style.display='grid';
+  document.getElementById('hs-count').textContent=filtered.length;
+  document.getElementById('hs-kg').textContent=totalKg.toFixed(1);
+  document.getElementById('hs-money').textContent=totalMoney.toFixed(2);
+
+  el.innerHTML=filtered.map(d=>{
+    let hoursStr='';
+    if (d.start&&d.end) {
+      const [sh,sm]=d.start.split(':').map(Number),[eh,em]=d.end.split(':').map(Number);
+      const m=(eh*60+em)-(sh*60+sm);
+      if(m>0) hoursStr=(m/60).toFixed(1)+'h · ';
+    }
+    const shopLines=d.shops.map(s=>{
+      const f=KNOWN_SHOPS.find(k=>k.name===s.name);
+      return `<b>${s.name}</b>${f?` <span style="color:var(--text3);font-size:11px;">(${f.address})</span>`:''}: ${s.meat.toFixed(1)}kg meat + ${s.chicken.toFixed(1)}kg chicken`;
+    }).join('<br>');
+    return `<div class="delivery-entry">
+      <div class="delivery-header">
+        <div>
+          <div class="delivery-date">${fmtDate(d.date)} — ${dayNames[new Date(d.date+'T12:00').getDay()]}</div>
+          <div class="delivery-time">${hoursStr}${d.start}${d.end?' → '+d.end:''}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="badge badge-money">${d.money.toFixed(2)} PLN</span>
+          <button class="btn danger small" onclick="deleteDelivery('${d.id}')">Delete</button>
+        </div>
+      </div>
+      <div class="delivery-shops">${shopLines}</div>
+      ${d.notes?`<div class="delivery-note">${d.notes}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function fmtDate(iso) {
+  if (!iso) return '';
+  const [y,m,d]=iso.split('-');
+  return `${d}.${m}.${y}`;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+  const now=new Date();
+  document.getElementById('sb-day').textContent=now.getDate();
+  document.getElementById('sb-month').textContent=now.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+  document.getElementById('delivery-sub').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('d-date').value=now.toISOString().split('T')[0];
+  initShopDropdown();
+  checkSetup();
+  if (API_URL) loadAll();
+}
+
+init();
+</script>
+</body>
+</html>
