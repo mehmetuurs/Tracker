@@ -452,33 +452,22 @@ let notifTimers=[];
 
 // ── SHEETS API ────────────────────────────────────────────────────────────────
 async function sheetsApi(action,payload){
-  return new Promise((resolve)=>{
-    const cbName='cb'+Date.now()+Math.floor(Math.random()*9999);
-    const url=SHEETS_API+'?action='+encodeURIComponent(action)+
-      (payload?'&data='+encodeURIComponent(JSON.stringify(payload)):'')+
-      '&callback='+cbName+'&t='+Date.now();
-    window[cbName]=(data)=>{
-      try{delete window[cbName];}catch(e){}
-      try{document.getElementById(cbName).remove();}catch(e){}
-      resolve(data);
-    };
-    const s=document.createElement('script');
-    s.id=cbName;
-    s.src=url;
-    s.onerror=()=>{
-      try{delete window[cbName];}catch(e){}
-      try{s.remove();}catch(e){}
-      resolve(null);
-    };
-    document.body.appendChild(s);
-    setTimeout(()=>{
-      if(window[cbName]){
-        try{delete window[cbName];}catch(e){}
-        try{s.remove();}catch(e){}
-        resolve(null);
-      }
-    },15000);
-  });
+  try{
+    if(payload){
+      const r=await fetch(SHEETS_API,{
+        method:'POST',
+        body:JSON.stringify({action,payload})
+      });
+      return await r.json();
+    } else {
+      const r=await fetch(SHEETS_API+'?action='+action);
+      return await r.json();
+    }
+  } catch(e){
+    console.error('sheetsApi error:',e);
+    toast('Connection error',true);
+    return null;
+  }
 }
 
 async function loadAll(){
