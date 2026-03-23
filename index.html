@@ -450,15 +450,17 @@ let notifTimers=[];
 
 // ── SHEETS API ────────────────────────────────────────────────────────────────
 async function sheetsApi(action,payload){
-  try{
-    if(payload){
-      const r=await fetch(SHEETS_API,{method:'POST',body:JSON.stringify({action,payload})});
-      return await r.json();
-    } else {
-      const r=await fetch(`${SHEETS_API}?action=${action}`);
-      return await r.json();
-    }
-  } catch(e){ toast('Connection error',true); return null; }
+  return new Promise((resolve)=>{
+    const url = payload
+      ? SHEETS_API+'?action='+action+'&data='+encodeURIComponent(JSON.stringify(payload))
+      : SHEETS_API+'?action='+action;
+    const script = document.createElement('script');
+    const cbName = 'cb_'+Date.now();
+    window[cbName] = (data)=>{ delete window[cbName]; script.remove(); resolve(data); };
+    script.src = url+'&callback='+cbName;
+    script.onerror = ()=>{ delete window[cbName]; script.remove(); toast('Connection error',true); resolve(null); };
+    document.head.appendChild(script);
+  });
 }
 
 async function loadAll(){
