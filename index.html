@@ -285,11 +285,13 @@ select option{background:var(--surface2);}
       <div class="card">
         <div class="card-label">Work hours & pay</div>
         <div class="row">
-          <div class="field"><label>Date</label><input type="date" id="d-date"></div>
+          <div class="field"><label>Date started</label><input type="date" id="d-date"></div>
           <div class="field"><label>Started work</label><input type="time" id="d-start"></div>
-          <div class="field"><label>Got home</label><input type="time" id="d-end"></div>
+          <div class="field"><label>Got home (time)</label><input type="time" id="d-end"></div>
+          <div class="field"><label>Got home (date)</label><input type="date" id="d-end-date"></div>
           <div class="field"><label>Money earned (PLN)</label><input type="number" id="d-money" placeholder="0.00" step="0.01" min="0"></div>
         </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:-6px;">💡 If you worked past midnight, set "got home date" to the next day</div>
       </div>
       <div class="card">
         <div class="card-label">Shops visited today</div>
@@ -485,6 +487,9 @@ function showPage(name,el){
   document.getElementById('page-'+name).classList.add('active');
   if(el) el.classList.add('active');
   if(name==='assistant' && chatHistory.length===0) initChat();
+  if(name==='schedule') renderSchedule();
+  if(name==='university') { renderUni(); renderUpcoming(); }
+  if(name==='history') renderHistory();
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
@@ -940,6 +945,8 @@ async function saveDelivery(){
   allDeliveries.unshift({id:res.id,date,start,end,money,notes,shops:[...shopEntries]});
   shopEntries=[];renderShops();
   ['d-start','d-end','d-money','d-notes'].forEach(id=>document.getElementById(id).value='');
+  const tomorrow=new Date(); tomorrow.setDate(tomorrow.getDate());
+  document.getElementById('d-end-date').value=new Date().toISOString().split('T')[0];
   document.getElementById('d-stats').style.display='none';
   renderHistory();renderSummary();
   toast('Delivery saved! ✓');
@@ -1139,6 +1146,7 @@ function init(){
   document.getElementById('sb-month').textContent=now.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
   document.getElementById('delivery-sub').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
   document.getElementById('d-date').value=now.toISOString().split('T')[0];
+  document.getElementById('d-end-date').value=now.toISOString().split('T')[0];
   initShopDropdown();
   requestNotifPermission();
   loadAll();
